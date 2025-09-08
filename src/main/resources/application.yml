@@ -1,0 +1,22 @@
+#MySQL \uC14B\uD305
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/global_assets_db
+    username: ${DB_USER}
+    password: ${DB_PW}
+
+ # ALWAYS : NEVER
+  sql:
+    init:
+      mode: ALWAYS
+  jpa:
+    # TRUE : FALSE
+    defer-datasource-initialization: true
+    hibernate:
+      #Supported values include 'create', 'create-drop', 'create-only', 'drop', 'update', 'none' and 'validate'
+      ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
