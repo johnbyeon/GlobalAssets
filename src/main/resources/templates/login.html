@@ -11,7 +11,7 @@
 
 <main class="form-signin w-100 m-auto">
   <form action="/loginProc" method="post">
-    <img class="mb-4" src="https://ap-global-assets-bucket.s3.ap-northeast-2.amazonaws.com/logo.png" width="72" height="72">
+    <img class="mb-4" th:src="@{/image/{filename}(filename='logo.png')}" width="72" height="72">
 
     <h1 class="h3 mb-3 fw-normal">로그인</h1>
     <div class="form-floating">

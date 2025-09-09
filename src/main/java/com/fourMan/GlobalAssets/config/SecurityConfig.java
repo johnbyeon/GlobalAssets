@@ -24,7 +24,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/", "/login", "/signup", "/signupProc", "/home").permitAll()
                         .requestMatchers("/css/**", "/js/**", "/img/**").permitAll()//
-                        .requestMatchers("/fragments/header","/fragments/footer").permitAll() // 👈 정적 리소스 허용
+                        .requestMatchers("/fragments/header","/fragments/footer").permitAll()
+                        .requestMatchers("/image/**").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .requestMatchers("/my/**").hasAnyRole("ADMIN", "USER")
                         .anyRequest().authenticated()
