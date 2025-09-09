@@ -20,3 +20,10 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
+cloud:
+  aws:
+    credentials:
+      access-key: ${ACCESS_KEY}
+      secret-key: ${SECRET_KEY}
+    region:
+      static: ${REGION}
