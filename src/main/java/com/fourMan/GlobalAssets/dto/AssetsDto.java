@@ -1,38 +1,36 @@
 package com.fourMan.GlobalAssets.dto;
 
 import com.fourMan.GlobalAssets.entity.AssetsEntity;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter @Setter
 public class AssetsDto {
-
-    private Long assetId;
-    //종목코드
-
-
+    private Long id;
+    private String code;
     private String symbol;
-    //종목이름
-
     private String name;
+    private String category;
 
     public static AssetsDto fromEntity(AssetsEntity entity) {
-        return new AssetsDto(
-                entity.getAssetId(),
-                entity.getSymbol(),
-                entity.getName()
-        );
+        if (entity == null) return null;
+        AssetsDto dto = new AssetsDto();
+        dto.setId(entity.getId());
+        dto.setCode(entity.getCode());
+        dto.setSymbol(entity.getSymbol());
+        dto.setName(entity.getName());
+        dto.setCategory(entity.getCategory());
+        return dto;
     }
 
-    // DTO -> Article
     public static AssetsEntity fromDto(AssetsDto dto) {
-        AssetsEntity entity = new AssetsEntity();
-        entity.setAssetId(dto.getAssetId());
-        entity.setSymbol(dto.getSymbol());
-        entity.setName(dto.getName());
-        return entity;
+        if (dto == null) return null;
+        AssetsEntity e = new AssetsEntity();
+        e.setId(dto.getId());
+        e.setCode(dto.getCode());
+        e.setSymbol(dto.getSymbol());
+        e.setName(dto.getName());
+        e.setCategory(dto.getCategory());
+        return e;
     }
 }
