@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="'경제 뉴스 - ' + ${title}">경제 뉴스</title>
+    <style>
+        body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 24px; line-height: 1.6; }
+        h1 { margin: 0 0 10px; }
+        .item { margin: 10px 0; }
+        .sep { font-family: ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; color: #94a3b8; }
+        a.title { color: #0f172a; text-decoration: none; }
+        .time { color: #475569; margin-left: 8px; white-space: nowrap; }
+        .muted { color: #64748b; }
+    </style>
+</head>
+<body>
+<h1 th:text="'경제 뉴스 (' + ${title} + ')'">경제 뉴스</h1>
+
+<div th:if="${#lists.isEmpty(items)}" class="muted">결과 없음</div>
+
+<div th:each="it : ${items}" class="item">
+    <div>
+        <strong th:text="${it.no} + '.'">1.</strong>
+        <a class="title" th:href="${it.link}" th:text="${it.title}" target="_blank" rel="noopener">제목</a>
+        <span class="time" th:text="${it.time}">-</span>
+    </div>
+    <div class="sep">---------------------------------------------</div>
+</div>
+</body>
+</html>

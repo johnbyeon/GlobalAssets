@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+  <meta charset="UTF-8"/>
+  <title>내부 서버 오류 (5xx)</title>
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;margin:48px;color:#0f172a}
+    h1{margin:0 0 8px}
+    .muted{color:#64748b}
+    .box{margin-top:16px;padding:12px 14px;border:1px solid #e5e7eb;border-radius:10px;background:#fff}
+    code{background:#f8fafc;padding:2px 6px;border-radius:6px}
+    .actions{margin-top:16px;display:flex;gap:12px}
+    a{color:#0f172a;text-decoration:none}
+  </style>
+</head>
+<body>
+<h1>내부 서버 오류가 발생했습니다</h1>
+<p class="muted">잠시 후 다시 시도해 주세요.</p>
+<div class="box">
+  <div><strong>메시지:</strong> <span th:text="${message}">-</span></div>
+  <div><strong>요청 경로:</strong> <code th:text="${path}">/</code></div>
+  <div class="muted" style="margin-top:6px;">
+    <span>시간: </span><span th:text="${timestamp}">-</span>
+  </div>
+</div>
+<div class="actions">
+  <a href="/">홈으로</a>
+  <a href="/rate/news">뉴스 메인</a>
+</div>
+</body>
+</html>
