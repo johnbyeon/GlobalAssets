@@ -1,6 +1,6 @@
 package com.fourMan.GlobalAssets.dto;
 
-import com.fourMan.GlobalAssets.entity.Comment;
+import com.fourMan.GlobalAssets.entity.CommentEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,7 +17,7 @@ public class CommentDto {
     private Timestamp createTime;
     private Timestamp updateTime;
 
-    public static CommentDto fromEntity(Comment entity) {
+    public static CommentDto fromEntity(CommentEntity entity) {
         return new CommentDto(
                 entity.getCommentId(),
                 entity.getUserId(),
@@ -26,8 +26,8 @@ public class CommentDto {
                 entity.getUpdateTime());
     }
 
-    public static Comment fromDto(CommentDto dto) {
-        Comment comment = new Comment();
+    public static CommentEntity fromDto(CommentDto dto) {
+        CommentEntity comment = new CommentEntity();
         comment.setCommentId(dto.getCommentId());
         comment.setUserId(dto.getUserId());
         comment.setCommentBody(dto.getCommentBody());

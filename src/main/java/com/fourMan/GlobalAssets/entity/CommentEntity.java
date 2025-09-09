@@ -1,9 +1,7 @@
 package com.fourMan.GlobalAssets.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
@@ -11,14 +9,14 @@ import java.sql.Timestamp;
 @Entity
 @Getter
 @Setter
-public class Comment {
+public class CommentEntity {
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long commentId;
 
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "article_id")
-        private Article article;
+        private ArticleEntity articleEntity;
 
         //유저 숫자 아이디
         private Long userId;

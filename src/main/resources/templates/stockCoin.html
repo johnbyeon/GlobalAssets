@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주식 / 코인 페이지</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/stockCoin.css}">
+</head>
+<body>
+    <div id="header"></div>
+    <main class="container py-4">
+        <div class="row g-4 main-layout d-flex justify-content-center">
+            <div class="col-12 col-md-4 d-flex flex-column">
+                <!-- 탭 버튼 -->
+                <ul class="nav nav-underline mb-0 tab-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" data-tab="stock">주식</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-tab="coin">코인</a>
+                    </li>
+                </ul>
+                <!-- 탭 콘텐츠 -->
+                <div class="tab-content mt-0">
+                    <div class="content-box exchange-rate tab-pane active" id="stock" style="width: 500px; height: 250px;">주식 콘텐츠</div>
+                    <div class="content-box exchange-rate tab-pane" id="coin" style="width: 500px; height: 250px;">코인 콘텐츠</div>
+                </div>
+                <div class="content-box news" style="width: 500px; height: 480px;">뉴스</div>
+            </div>
+            <div class="col-12 col-md-4 d-flex flex-column">
+                <div class="content-box board" style="width: 500px; height: 750px;">게시판</div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="content-box ad" style="width: 250px; height: 750px;">광고</div>
+            </div>
+        </div>
+    </main>
+    <div id="footer"></div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/main.js}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const tabLinks = document.querySelectorAll('.nav-link');
+            const tabPanes = document.querySelectorAll('.tab-pane');
+
+            tabLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const tabId = this.getAttribute('data-tab');
+
+                    // 모든 탭 비활성화
+                    tabLinks.forEach(l => l.classList.remove('active'));
+                    tabPanes.forEach(pane => pane.classList.remove('active'));
+
+                    // 선택된 탭 활성화
+                    this.classList.add('active');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

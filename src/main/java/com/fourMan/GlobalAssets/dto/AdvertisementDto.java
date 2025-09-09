@@ -1,6 +1,6 @@
 package com.fourMan.GlobalAssets.dto;
 
-import com.fourMan.GlobalAssets.entity.Advertisement;
+import com.fourMan.GlobalAssets.entity.AdvertisementEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,7 +16,7 @@ public class AdvertisementDto {
     //광고 이미지 주소
     private String imagePath;
 
-    public static AdvertisementDto fromComment(Advertisement entity) {
+    public static AdvertisementDto fromComment(AdvertisementEntity entity) {
         return new AdvertisementDto(
                 entity.getAdventId(),
                 entity.getSortNum(),
@@ -24,8 +24,8 @@ public class AdvertisementDto {
         );
     }
 
-    public static Advertisement fromDto(AdvertisementDto dto) {
-        Advertisement entity = new Advertisement();
+    public static AdvertisementEntity fromDto(AdvertisementDto dto) {
+        AdvertisementEntity entity = new AdvertisementEntity();
         entity.setAdventId(dto.getAdventId());
         entity.setSortNum(dto.getSortNum());
         entity.setImagePath(dto.getImagePath());

@@ -7,22 +7,19 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.sql.Timestamp;
-
 @Entity
 @Getter
 @Setter
-public class News {
+//광고 엔티티
+public class AdvertisementEntity {
+    //광고 번호
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long newsId;
-    //종목번호 어떤종목의 뉴스인가??
-    private Long assetId;
-    //뉴스날짜
-    private Timestamp timestamp;
+    private Long adventId;
 
-    private String title;
+    //광고 순번
+    private Long sortNum;
 
-    private String urlLink;
-
+    //광고 이미지 주소
+    private String imagePath;
 }

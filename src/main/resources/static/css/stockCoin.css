@@ -1,0 +1,94 @@
+body {
+    background-color: #f0f2f5;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+/* 모든 콘텐츠 박스에 공통적으로 적용되는 스타일 */
+.content-box {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 1rem; /* 박스 간의 수직 간격 */
+}
+
+/* 각 컬럼의 Flex-grow 설정으로 컬럼 너비 조정 */
+.main-layout > .col-md-4 {
+    flex-grow: 1;
+}
+
+.main-layout > .col-md-4:nth-child(2) {
+    flex-grow: 1;
+}
+
+.main-layout > .col-md-4:nth-child(3) {
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: auto;
+}
+
+/* 개별 박스 크기 지정 */
+.exchange-rate {
+    width: 500px;
+    height: 250px;
+    flex-basis: 250px;
+}
+
+.news {
+    width: 500px;
+    height: 480px;
+}
+
+.board {
+    width: 500px;
+    height: 750px;
+}
+
+.ad {
+    width: 250px;
+    height: 750px;
+}
+
+/* 탭 관련 스타일 */
+.tab-nav {
+    margin-bottom: 0; /* 하단 마진 제거 */
+    border-bottom: none; /* 밑줄 스타일 간소화 */
+    margin-top: 0; /* 상단 마진 제거 */
+}
+
+.nav-link {
+    padding: 0.1rem 0.5rem; /* 높이를 줄이기 위해 상하 패딩 0.1rem으로 축소 */
+    margin: 0 0.25rem; /* 탭 간 간격 유지 */
+    line-height: 1; /* 줄 높이 조정 */
+}
+
+.tab-content {
+    width: 100%;
+    margin-top: 0; /* 탭과 콘텐츠 간 간격 최소화 */
+}
+
+.tab-pane {
+    display: none;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+img[alt="Logo"] {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    margin-top: 0px;
+}

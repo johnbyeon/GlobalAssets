@@ -1,7 +1,6 @@
 package com.fourMan.GlobalAssets.dto;
 
-import com.fourMan.GlobalAssets.entity.News;
-import com.fourMan.GlobalAssets.entity.Viewers;
+import com.fourMan.GlobalAssets.entity.NewsEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,7 +21,7 @@ public class NewsDto {
 
     private String urlLink;
 
-    public static NewsDto fromEntity(News entity) {
+    public static NewsDto fromEntity(NewsEntity entity) {
         return new NewsDto(
                 entity.getNewsId(),
                 entity.getAssetId(),
@@ -33,8 +32,8 @@ public class NewsDto {
     }
 
     // DTO -> Article
-    public static News fromDto(NewsDto dto) {
-        News entity = new News();
+    public static NewsEntity fromDto(NewsDto dto) {
+        NewsEntity entity = new NewsEntity();
         entity.setNewsId(dto.getNewsId());
         entity.setAssetId(dto.getAssetId());
         entity.setTimestamp(dto.getTimestamp());

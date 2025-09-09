@@ -3,8 +3,6 @@ package com.fourMan.GlobalAssets.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.Value;
-import org.w3c.dom.stylesheets.LinkStyle;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -13,7 +11,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-public class Article {
+public class ArticleEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,20 +34,20 @@ public class Article {
     private Timestamp updateTime;
 
     @OneToMany(fetch = FetchType.LAZY,
-            mappedBy = "article",
+            mappedBy = "articleEntity",
             cascade = {CascadeType.PERSIST,
                     CascadeType.REMOVE})
-    List<Comment> comments = new ArrayList<>();
+    List<CommentEntity> commentEntities = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY,
-            mappedBy = "article",
+            mappedBy = "articleEntity",
             cascade = {CascadeType.PERSIST,
                     CascadeType.REMOVE})
-    List<Viewers> viewers = new ArrayList<>();
+    List<ViewersEntity> viewers = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY,
-            mappedBy = "article",
+            mappedBy = "articleEntity",
             cascade = {CascadeType.PERSIST,
                     CascadeType.REMOVE})
-    List<Likes> Likes = new ArrayList<>();
+    List<LikesEntity> LikesEntity = new ArrayList<>();
 }

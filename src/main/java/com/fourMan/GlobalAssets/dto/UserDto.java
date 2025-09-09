@@ -1,10 +1,8 @@
 package com.fourMan.GlobalAssets.dto;
 
-import com.fourMan.GlobalAssets.entity.User;
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fourMan.GlobalAssets.entity.UserEntity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,19 +29,24 @@ public class UserDto {
     private Timestamp firstDate;
     //마지막로그인
     private Timestamp LastDate;
-    public static User fromDto(UserDto dto){
 
-        return new User(
-                dto.getUserId(),
-                dto.getEmail(),
-                dto.getUserStatus(),
-                dto.getPassword(),
-                dto.getNickname(),
-                dto.getFirstDate(),
-                dto.getLastDate()
-        );
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
+
+    public static UserEntity fromDto(UserDto dto){
+        UserEntity entity = new UserEntity();
+        entity.setUserId(dto.getUserId());
+        entity.setEmail(dto.getEmail());
+        entity.setUserStatus(dto.getUserStatus());
+        entity.setPassword(dto.getPassword());
+        entity.setNickname(dto.getNickname());
+        entity.setFirstDate(dto.getFirstDate());
+        entity.setLastDate(dto.getLastDate());
+        entity.setRole(dto.getRole());
+        return entity;
     }
-    public static UserDto fromEntity(User entity){
+
+    public static UserDto fromEntity(UserEntity entity){
         return new UserDto(
                 entity.getUserId(),
                 entity.getEmail(),
@@ -51,7 +54,8 @@ public class UserDto {
                 entity.getPassword(),
                 entity.getNickname(),
                 entity.getFirstDate(),
-                entity.getLastDate()
+                entity.getLastDate(),
+                entity.getRole()
         );
     }
 }

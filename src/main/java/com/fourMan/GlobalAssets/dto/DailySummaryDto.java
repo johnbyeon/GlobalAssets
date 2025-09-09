@@ -1,8 +1,6 @@
 package com.fourMan.GlobalAssets.dto;
 
-import com.fourMan.GlobalAssets.entity.DailySummary;
-import com.fourMan.GlobalAssets.entity.Viewers;
-import jakarta.persistence.Id;
+import com.fourMan.GlobalAssets.entity.DailySummaryEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,29 +16,29 @@ public class DailySummaryDto {
 
     private Timestamp timestamp;
     //현재가격
-    private Double Price;
+    private Double price;
     //전일대비 가격변화
-    private Double change;
+    private Double priceChange;
     //전일대비 등락률
     private Double changePercent;
 
-    public static DailySummaryDto fromEntity(DailySummary entity) {
+    public static DailySummaryDto fromEntity(DailySummaryEntity entity) {
         return new DailySummaryDto(
                 entity.getAssetId(),
                 entity.getTimestamp(),
                 entity.getPrice(),
-                entity.getChange(),
+                entity.getPriceChange(),
                 entity.getChangePercent()
         );
     }
 
     // DTO -> Article
-    public static DailySummary fromDto(DailySummaryDto dto) {
-        DailySummary entity = new DailySummary();
+    public static DailySummaryEntity fromDto(DailySummaryDto dto) {
+        DailySummaryEntity entity = new DailySummaryEntity();
         entity.setAssetId(dto.getAssetId());
         entity.setTimestamp(dto.getTimestamp());
         entity.setPrice(dto.getPrice());
-        entity.setChange(dto.getChange());
+        entity.setPriceChange(dto.getPriceChange());
         entity.setChangePercent(dto.getChangePercent());
         return entity;
     }

@@ -9,13 +9,13 @@ spring:
  # ALWAYS : NEVER
   sql:
     init:
-      mode: ALWAYS
+      mode: NEVER
   jpa:
     # TRUE : FALSE
-    defer-datasource-initialization: true
+    defer-datasource-initialization: false
     hibernate:
       #Supported values include 'create', 'create-drop', 'create-only', 'drop', 'update', 'none' and 'validate'
-      ddl-auto: create
+      ddl-auto: validate
     properties:
       hibernate:
         show_sql: true

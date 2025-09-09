@@ -1,8 +1,6 @@
 package com.fourMan.GlobalAssets.dto;
 
-import com.fourMan.GlobalAssets.entity.Prices;
-import com.fourMan.GlobalAssets.entity.Viewers;
-import jakarta.persistence.Column;
+import com.fourMan.GlobalAssets.entity.PricesEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,7 +25,7 @@ public class PricesDto {
     private Double high;
 
     private Double low;
-    public static PricesDto fromEntity(Prices entity) {
+    public static PricesDto fromEntity(PricesEntity entity) {
         return new PricesDto(
                 entity.getPriceId(),
                 entity.getAssetId(),
@@ -40,8 +38,8 @@ public class PricesDto {
     }
 
     // DTO -> Article
-    public static Prices fromDto(PricesDto dto) {
-        Prices entity = new Prices();
+    public static PricesEntity fromDto(PricesDto dto) {
+        PricesEntity entity = new PricesEntity();
         entity.setPriceId(dto.getPriceId());
         entity.setAssetId(dto.getAssetId());
         entity.setTimestamp(dto.getTimestamp());

@@ -1,0 +1,86 @@
+body {
+    background-color: #f0f2f5;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+/* 모든 콘텐츠 박스에 공통적으로 적용되는 스타일 */
+.content-box {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 1rem; /* 박스 간의 수직 간격 */
+}
+
+/* 각 컬럼의 Flex-grow 설정으로 컬럼 너비 조정 */
+.main-layout > .col-md-4 {
+    flex-grow: 1;
+}
+
+.main-layout > .col-md-4:nth-child(2) {
+    flex-grow: 1;
+}
+
+.main-layout > .col-md-4:nth-child(3) {
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: auto;
+}
+
+/* 개별 박스 크기 지정 */
+.exchange-rate, .stock, .coin {
+    flex-basis: 250px; /* 세로로 쌓이는 박스 높이 조절 */
+    height: 250px;
+}
+
+.news, .board {
+    flex-basis: 375px; /* 세로로 쌓이는 박스 높이 조절 */
+    height: 375px;
+}
+
+.ad {
+    width: 250px;
+    height: 750px; /* 요청하신 750px로 수정 */
+}
+
+
+.content-box {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.exchange-rate, .stock, .coin {
+    width: 500px;
+    height: 250px;
+}
+
+.news, .board {
+    width: 500px;
+    height: 375px;
+}
+
+.ad {
+    width: 250px;
+    height: 750px;
+}
+
+img[alt="Logo"] {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+}
+

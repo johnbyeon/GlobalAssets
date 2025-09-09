@@ -7,7 +7,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class Assets {
+public class AssetsEntity {
     //종목번호
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
