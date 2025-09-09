@@ -9,7 +9,7 @@ import java.sql.Timestamp;
 @Entity
 @Getter
 @Setter
-public class Prices {
+public class PricesEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long priceId;

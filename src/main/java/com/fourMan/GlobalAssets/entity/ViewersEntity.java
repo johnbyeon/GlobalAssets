@@ -7,12 +7,12 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class Viewers {
+public class ViewersEntity {
     @Id
     private Long userId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id")
-    private Article article;
+    private ArticleEntity articleEntity;
 
 }

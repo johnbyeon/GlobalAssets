@@ -1,7 +1,6 @@
 package com.fourMan.GlobalAssets.dto;
 
-import com.fourMan.GlobalAssets.entity.Assets;
-import jakarta.persistence.Column;
+import com.fourMan.GlobalAssets.entity.AssetsEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,7 +19,7 @@ public class AssetsDto {
 
     private String name;
 
-    public static AssetsDto fromEntity(Assets entity) {
+    public static AssetsDto fromEntity(AssetsEntity entity) {
         return new AssetsDto(
                 entity.getAssetId(),
                 entity.getSymbol(),
@@ -29,8 +28,8 @@ public class AssetsDto {
     }
 
     // DTO -> Article
-    public static Assets fromDto(AssetsDto dto) {
-        Assets entity = new Assets();
+    public static AssetsEntity fromDto(AssetsDto dto) {
+        AssetsEntity entity = new AssetsEntity();
         entity.setAssetId(dto.getAssetId());
         entity.setSymbol(dto.getSymbol());
         entity.setName(dto.getName());

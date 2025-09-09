@@ -1,6 +1,6 @@
 package com.fourMan.GlobalAssets.dto;
 
-import com.fourMan.GlobalAssets.entity.Article;
+import com.fourMan.GlobalAssets.entity.ArticleEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -36,7 +36,7 @@ public class ArticleDto {
     List<LikesDto> Likes = new ArrayList<>();
 
     // 엔티티 -> DTO
-    public static ArticleDto fromEntity(Article entity) {
+    public static ArticleDto fromEntity(ArticleEntity entity) {
         return new ArticleDto(
                 entity.getArticleId(),
                 entity.getAssetId(),
@@ -46,7 +46,7 @@ public class ArticleDto {
                 entity.getBody(),
                 entity.getCreateTime(),
                 entity.getUpdateTime(),
-                entity.getComments()
+                entity.getCommentEntities()
                 .stream()
                 .map(x -> CommentDto.fromEntity(x))
                 .toList(),
@@ -54,7 +54,7 @@ public class ArticleDto {
                         .stream()
                         .map(x->ViewersDto.fromEntity(x))
                         .toList(),
-                entity.getLikes()
+                entity.getLikesEntity()
                         .stream()
                         .map(x->LikesDto.fromEntity(x))
                         .toList()
@@ -62,8 +62,8 @@ public class ArticleDto {
     }
 
     // DTO -> Article
-    public static Article fromDto(ArticleDto dto) {
-        Article entity = new Article();
+    public static ArticleEntity fromDto(ArticleDto dto) {
+        ArticleEntity entity = new ArticleEntity();
         entity.setArticleId(dto.getArticleId());
         entity.setAssetId(dto.getAssetId());
         entity.setUserId(dto.getUserId());
