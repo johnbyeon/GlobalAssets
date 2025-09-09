@@ -17,6 +17,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        email = email.toLowerCase();
         // 1. username이 DB에 있는지 확인 : 없으면 다시 로그인 보냄
         UserEntity userData = userRepository.findByEmail(email);
         // 비밀번호 체크는 시큐리티가 알아서 해줌.
