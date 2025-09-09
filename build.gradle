@@ -25,6 +25,14 @@ repositories {
 }
 
 dependencies {
+	// AWS SDK v2 - S3
+	implementation platform('software.amazon.awssdk:bom:2.26.0') // v2 최신 BOM
+	implementation 'software.amazon.awssdk:s3'
+	implementation 'software.amazon.awssdk:auth'
+	implementation 'software.amazon.awssdk:regions'
+
+
+
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
