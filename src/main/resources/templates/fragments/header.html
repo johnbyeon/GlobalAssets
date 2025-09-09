@@ -9,8 +9,9 @@
                 <li><a th:href="@{/stockCoin}" class="nav-link px-2 text-white">주식 / 코인</a></li>
             </ul>
             <div class="text-end">
-                <a th:href="@{/login}" class="btn btn-outline-light me-2">Login</a>
-                <a th:href="@{/signup}" class="btn btn-warning">Sign-up</a>
+                <a sec:authorize="isAnonymous()" th:href="@{/login}" class="btn btn-outline-light me-2">Login</a>
+                <a sec:authorize="isAnonymous()" th:href="@{/signup}" class="btn btn-warning">Sign-up</a>
+                <a sec:authorize="isAuthenticated()" th:href="@{/logout}" class="btn btn-outline-light me-2">Logout</a>
             </div>
         </div>
     </div>

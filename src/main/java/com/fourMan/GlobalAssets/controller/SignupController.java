@@ -26,6 +26,7 @@ public class SignupController {
     @PostMapping("/signupProc")
     public String joinProcess(@ModelAttribute("dto")SignupDto signupDto) {
         log.info("회원가입 진입확인");
+        signupDto.setEmail(signupDto.getEmail().toLowerCase());
         signupService.SignupProcess(signupDto);
         return "redirect:/login";
     }
