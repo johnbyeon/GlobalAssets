@@ -1,4 +1,3 @@
-// src/main/java/com/fourMan/GlobalAssets/dto/DailySummaryDto.java
 package com.fourMan.GlobalAssets.dto;
 
 import com.fourMan.GlobalAssets.entity.DailySummaryEntity;

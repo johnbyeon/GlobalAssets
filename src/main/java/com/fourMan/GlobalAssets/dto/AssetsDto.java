@@ -2,13 +2,14 @@ package com.fourMan.GlobalAssets.dto;
 
 import com.fourMan.GlobalAssets.entity.AssetsEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class AssetsDto {
     private Long id;
     private String code;

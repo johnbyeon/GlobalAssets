@@ -8,12 +8,16 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @Repository
-public interface PriceRepository extends JpaRepository<PricesEntity, Long> {
+public interface PricesRepository extends JpaRepository<PricesEntity, Long> {
 
     boolean existsByAssetIdAndTimestamp(Long assetId, LocalDateTime ts);
 
     List<PricesEntity> findTop200ByAssetIdOrderByTimestampDesc(Long assetId);
 
+    List<PricesEntity> findTop20ByAssetIdOrderByTimestampDesc(Long assetId);
+
     @Query("select p from PricesEntity p where p.assetId=:assetId and p.timestamp between :from and :to order by p.timestamp asc")
     List<PricesEntity> findRangeAsc(Long assetId, LocalDateTime from, LocalDateTime to);
+
+
 }
