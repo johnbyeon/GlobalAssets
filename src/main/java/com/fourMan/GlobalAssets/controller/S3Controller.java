@@ -30,9 +30,11 @@ public class S3Controller {
     @PreAuthorize("hasRole('ROLE_ADMIN')") //관리자 권한
     @PostMapping("/presigned-url")
     @ResponseBody
-    public PresignedUrlResponse getPresignedUrl(@RequestParam String filename) {
+    public PresignedUrlResponse getPresignedUrl(@RequestParam String filename,@RequestParam String linkPath) {
         AdvertisementDto dto = AdvertisementDto.builder()
-                        .imagePath(filename).build();
+                .imagePath(filename)
+                .linkPath(linkPath)
+                .build();
         advertisementService.addAdvertisement(dto);
         // 확장자 추출
         String extension = "";

@@ -22,4 +22,7 @@ public class AdvertisementEntity {
 
     //광고 이미지 주소(파일이름)
     private String imagePath;
+    
+    //광고 주소 (실제 연결 될 페이지주소)
+    private String linkPath;
 }
