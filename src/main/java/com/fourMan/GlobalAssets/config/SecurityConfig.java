@@ -28,6 +28,7 @@ public class SecurityConfig {
                         .requestMatchers("/image/**").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .requestMatchers("/my/**").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers("/*").permitAll()
                         .anyRequest().authenticated()
                 );
         // Login 요청 처리

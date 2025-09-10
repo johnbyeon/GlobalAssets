@@ -14,6 +14,6 @@ public interface PriceRepository extends JpaRepository<PricesEntity, Long> {
 
     List<PricesEntity> findTop200ByAssetIdOrderByTimestampDesc(Long assetId);
 
-    @Query("select p from PriceEntity p where p.assetId=:assetId and p.timestamp between :from and :to order by p.timestamp asc")
+    @Query("select p from PricesEntity p where p.assetId=:assetId and p.timestamp between :from and :to order by p.timestamp asc")
     List<PricesEntity> findRangeAsc(Long assetId, LocalDateTime from, LocalDateTime to);
 }

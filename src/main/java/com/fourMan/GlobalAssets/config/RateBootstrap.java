@@ -28,11 +28,12 @@ public class RateBootstrap {
         rateassetsRepository.findBySymbol(symbol)
                 .or(() -> rateassetsRepository.findByCode(code))
                 .orElseGet(() -> {
-                    AssetsEntity e = new AssetsEntity();
-                    e.setCode(code);
-                    e.setSymbol(symbol);
-                    e.setName(name);
-                    e.setCategory(category);
+                    AssetsEntity e = AssetsEntity.builder()
+                            .code(code)
+                            .symbol(symbol)
+                            .name(name)
+                            .category(category)
+                            .build();
                     return rateassetsRepository.save(e);
                 });
     }
