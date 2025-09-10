@@ -18,11 +18,13 @@ public class AdvertisementDto {
     //광고 이미지 파일이름
     private String imagePath;
 
+    private String linkPath;
     public static AdvertisementDto fromEntity(AdvertisementEntity entity) {
         return new AdvertisementDto(
                 entity.getAdventId(),
                 entity.getSortNum(),
-                entity.getImagePath()
+                entity.getImagePath(),
+                entity.getLinkPath()
         );
     }
 
@@ -31,6 +33,7 @@ public class AdvertisementDto {
         entity.setAdventId(dto.getAdventId());
         entity.setSortNum(dto.getSortNum());
         entity.setImagePath(dto.getImagePath());
+        entity.setLinkPath(dto.getLinkPath());
         return entity;
     }
 }
