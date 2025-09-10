@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="'뉴스 · ' + ${title}">뉴스</title>
+    <style>
+        :root { color-scheme: light dark; }
+        body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; line-height: 1.6; }
+        .wrap { padding: 12px; width: 100%; box-sizing: border-box; }
+        h3 { margin: 0 0 8px; font-size: 15px; color: #0f172a; }
+        .muted { color: #64748b; font-size: 13px; }
+        .item { margin: 8px 0; }
+        .sep { font-family: ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; color: #94a3b8; }
+        a.title { color: #0f172a; text-decoration: none; }
+        .time { color: #475569; margin-left: 6px; white-space: nowrap; }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <h3 th:text="'뉴스 · ' + ${title}">뉴스</h3>
+
+    <div th:if="${#lists.isEmpty(items)}" class="muted">결과 없음</div>
+
+    <div th:each="it : ${items}" class="item">
+        <div>
+            <strong th:text="${it.no} + '.'">1.</strong>
+            <a class="title" th:href="${it.link}" th:text="${it.title}" target="_blank" rel="noopener">제목</a>
+            <span class="time" th:text="${it.time}">-</span>
+        </div>
+        <div class="sep">---------------------------------------------</div>
+    </div>
+</div>
+</body>
+</html>

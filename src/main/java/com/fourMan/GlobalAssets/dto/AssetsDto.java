@@ -1,8 +1,11 @@
 package com.fourMan.GlobalAssets.dto;
 
 import com.fourMan.GlobalAssets.entity.AssetsEntity;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter @Setter
 public class AssetsDto {
@@ -11,6 +14,10 @@ public class AssetsDto {
     private String symbol;
     private String name;
     private String category;
+
+    // ★ 뉴스 묶음: 응답 시에만 채움 (DB/엔티티 비의존)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private List<RateNewsItem> news;
 
     public static AssetsDto fromEntity(AssetsEntity entity) {
         if (entity == null) return null;

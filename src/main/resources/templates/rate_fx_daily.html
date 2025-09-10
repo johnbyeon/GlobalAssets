@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8"/>
+    <title>일별 환율</title>
+    <style>
+        body { font-family: system-ui, sans-serif; margin: 24px; }
+        h2 { margin-top: 32px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+        th, td { border: 1px solid #ddd; padding: 8px 10px; text-align: right; }
+        th { background: #f6f6f6; }
+        td:first-child, th:first-child { text-align: center; }
+
+        /* 현재가 강조 */
+        td.price { font-weight: 700; font-size: 1.12em; color: #111; white-space: nowrap; }
+
+        /* 등락 색상 */
+        .up { color: #d23b3b; }      /* 빨강 */
+        .down { color: #1261c4; }    /* 파랑 */
+        .mute { color: #888; }
+
+        /* 방향 아이콘용 공통 클래스 */
+        td.delta::before {
+            content: "—";              /* 기본: 보합 대시 */
+            color: #b3b3b3;
+            display: inline-block;
+            width: 1.1em;
+            margin-right: 6px;
+            text-align: center;
+        }
+        td.delta.up::before   { content: "▲"; color: #d23b3b; }  /* 상승 */
+        td.delta.down::before { content: "▼"; color: #1261c4; }  /* 하락 */
+    </style>
+</head>
+<body>
+<h1>일별 환율 (원/달러 · 원/엔(100) · 원/유로)</h1>
+
+<section>
+    <h2>원/달러</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>날짜</th>
+            <th>현재가</th>
+            <th>전일대비 등락금액</th>
+            <th>전일대비 등락률</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="r : ${usdRows}">
+            <td th:text="${r.date}"></td>
+            <td class="price" th:text="${#numbers.formatDecimal(r.price, 1, 'COMMA', 2, 'POINT')}"></td>
+
+            <td class="delta"
+                th:classappend="${r.up} ? ' up' : (${r.down} ? ' down' : ' mute')"
+                th:text="${#numbers.formatDecimal(r.change, 1, 'COMMA', 2, 'POINT')}"></td>
+
+            <td class="delta"
+                th:classappend="${r.up} ? ' up' : (${r.down} ? ' down' : ' mute')"
+                th:text="${#numbers.formatDecimal(r.changePercent, 1, 'COMMA', 2, 'POINT')} + '%'"></td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+
+<section>
+    <h2>원/엔 (100엔 기준)</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>날짜</th>
+            <th>현재가</th>
+            <th>전일대비 등락금액</th>
+            <th>전일대비 등락률</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="r : ${jpyRows}">
+            <td th:text="${r.date}"></td>
+            <td class="price" th:text="${#numbers.formatDecimal(r.price, 1, 'COMMA', 2, 'POINT')}"></td>
+
+            <td class="delta"
+                th:classappend="${r.up} ? ' up' : (${r.down} ? ' down' : ' mute')"
+                th:text="${#numbers.formatDecimal(r.change, 1, 'COMMA', 2, 'POINT')}"></td>
+
+            <td class="delta"
+                th:classappend="${r.up} ? ' up' : (${r.down} ? ' down' : ' mute')"
+                th:text="${#numbers.formatDecimal(r.changePercent, 1, 'COMMA', 2, 'POINT')} + '%'"></td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+
+<section>
+    <h2>원/유로</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>날짜</th>
+            <th>현재가</th>
+            <th>전일대비 등락금액</th>
+            <th>전일대비 등락률</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="r : ${eurRows}">
+            <td th:text="${r.date}"></td>
+            <td class="price" th:text="${#numbers.formatDecimal(r.price, 1, 'COMMA', 2, 'POINT')}"></td>
+
+            <td class="delta"
+                th:classappend="${r.up} ? ' up' : (${r.down} ? ' down' : ' mute')"
+                th:text="${#numbers.formatDecimal(r.change, 1, 'COMMA', 2, 'POINT')}"></td>
+
+            <td class="delta"
+                th:classappend="${r.up} ? ' up' : (${r.down} ? ' down' : ' mute')"
+                th:text="${#numbers.formatDecimal(r.changePercent, 1, 'COMMA', 2, 'POINT')} + '%'"></td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+
+<p class="mute" style="margin-top:16px;">
+    데이터 출처: TwelveData (표시 시각: Asia/Seoul, 엔화는 100엔 기준 표시)
+    · <a href="/rate/admin/refresh">수동 갱신</a>
+</p>
+</body>
+</html>

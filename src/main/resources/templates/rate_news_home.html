@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+  <meta charset="UTF-8"/>
+  <title>뉴스 메인</title>
+  <style>
+    body { margin: 24px; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; line-height: 1.6; }
+    h1 { margin: 0 0 10px; }
+    h2 { margin: 18px 0 8px; }
+    .muted { color: #64748b; }
+    .grid {
+      display: grid; gap: 10px; grid-template-columns: repeat(2, 1fr);
+    }
+    @media (min-width: 1280px) {
+      .grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .card { border: 1px solid #e5e7eb; border-radius: 10px; background: #fff; overflow: hidden; }
+    .card h3 { margin: 0; padding: 10px 12px; border-bottom: 1px solid #e5e7eb; font-size: 15px; background: #f8fafc; }
+    .list { padding: 10px 12px; }
+    .item { margin: 8px 0; }
+    .sep { font-family: ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; color: #94a3b8; }
+    a.title { color: #0f172a; text-decoration: none; }
+    .time { color: #475569; margin-left: 8px; white-space: nowrap; }
+    .links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+    .chip { border: 1px solid #e5e7eb; border-radius: 999px; padding: 6px 10px; background: #fff; font-size: 13px; }
+    .chip a { text-decoration: none; color: #0f172a; }
+  </style>
+</head>
+<body>
+<h1>뉴스 메인</h1>
+
+<!-- 빠른 이동: 종목별 페이지 링크 -->
+<div class="links">
+    <span class="chip" th:each="k : ${keys}">
+      <a th:href="@{|/rate/news/${k}|}" th:text="${displayNames[k]}">종목</a>
+    </span>
+</div>
+
+<h2>경제 뉴스 (최신 15)</h2>
+<div th:if="${#lists.isEmpty(economyItems)}" class="muted">결과 없음</div>
+
+<div class="card" th:if="${!#lists.isEmpty(economyItems)}">
+  <h3>ECONOMY</h3>
+  <div class="list">
+    <div class="item" th:each="it : ${economyItems}">
+      <div>
+        <strong th:text="${it.no} + '.'">1.</strong>
+        <a class="title" th:href="${it.link}" th:text="${it.title}" target="_blank" rel="noopener">제목</a>
+        <span class="time" th:text="${it.time}">-</span>
+      </div>
+      <div class="sep">---------------------------------------------</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
