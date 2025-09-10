@@ -20,6 +20,6 @@ public class AdvertisementEntity {
     //광고 순번
     private Long sortNum;
 
-    //광고 이미지 주소
+    //광고 이미지 주소(파일이름)
     private String imagePath;
 }
