@@ -22,21 +22,21 @@ spring:
         format_sql: true
 
 # ====== FX 소스 (Twelve Data) ======
-twelve:
-  base-url: https://api.twelvedata.com
-  api-key: a5b673b9653843499ecc1d8f3123b87f
-
-twelvedata:
-  apikey: ${twelve.api-key}
-  base-url: ${twelve.base-url}
-# ====== Naver Search Open API (News) ======
-
-naver:
-  search:
-    news-url: https://openapi.naver.com/v1/search/news.json
-    client-id: 0QqTJMTTyd2KdMtH9U01
-    client-secret: NYYp04bH9C
-=======
+#twelve:
+#  base-url: https://api.twelvedata.com
+#  api-key: a5b673b9653843499ecc1d8f3123b87f
+#
+#twelvedata:
+#  apikey: ${twelve.api-key}
+#  base-url: ${twelve.base-url}
+## ====== Naver Search Open API (News) ======
+#
+#naver:
+#  search:
+#    news-url: https://openapi.naver.com/v1/search/news.json
+#    client-id: 0QqTJMTTyd2KdMtH9U01
+#    client-secret: NYYp04bH9C
+#=======
 cloud:
   aws:
     credentials:
