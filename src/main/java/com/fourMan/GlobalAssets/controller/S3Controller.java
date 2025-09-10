@@ -1,6 +1,8 @@
 package com.fourMan.GlobalAssets.controller;
 
+import com.fourMan.GlobalAssets.dto.AdvertisementDto;
 import com.fourMan.GlobalAssets.dto.PresignedUrlResponse;
+import com.fourMan.GlobalAssets.service.AdvertisementService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -16,18 +18,22 @@ import java.time.Duration;
 @RequestMapping("/s3")
 @RequiredArgsConstructor
 public class S3Controller {
-
+    private final AdvertisementService advertisementService;
     private final S3Presigner presigner;
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')") //관리자 권한
     @GetMapping("/upload")
     public String showUploadPage() {
         return "upload"; // upload.html 렌더링
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')") //관리자 권한
     @PostMapping("/presigned-url")
     @ResponseBody
     public PresignedUrlResponse getPresignedUrl(@RequestParam String filename) {
+        AdvertisementDto dto = AdvertisementDto.builder()
+                        .imagePath(filename).build();
+        advertisementService.addAdvertisement(dto);
         // 확장자 추출
         String extension = "";
         if (filename.contains(".")) {
@@ -62,4 +68,6 @@ public class S3Controller {
                 contentType
         );
     }
+
+
 }
