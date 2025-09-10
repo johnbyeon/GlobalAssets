@@ -16,21 +16,24 @@ public class MainController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/exchange")
-    @ResponseBody
     public String userOnlyExchange() {
         return "exchange";
     }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/stockCoin")
-    @ResponseBody
     public String userOnlyStockCoin() {
         return "stockCoin";
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/admin")
+    public String adminOnlyAdminPage() {
+        return "admin";
+    }
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/adminOnly")
-    @ResponseBody
     public String adminOnly() {
         return "관리자 전용 페이지!";
     }

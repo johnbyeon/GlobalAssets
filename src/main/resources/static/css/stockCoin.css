@@ -16,6 +16,7 @@ body {
     padding: 1rem;
     box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     font-weight: bold;
@@ -23,28 +24,59 @@ body {
     margin-bottom: 1rem; /* 박스 간의 수직 간격 */
 }
 
-/* 각 컬럼의 Flex-grow 설정으로 컬럼 너비 조정 */
-.main-layout > .col-md-4 {
-    flex-grow: 1;
+/* 차트 박스 내부 스타일링 */
+.chart-box {
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+    height: 250px;
+    align-items: flex-start; /* 차트 박스 내 콘텐츠를 왼쪽 정렬 */
 }
 
-.main-layout > .col-md-4:nth-child(2) {
-    flex-grow: 1;
+/* 탭 버튼 스타일링 */
+.nav-pills {
+    flex-shrink: 0; /* 탭 버튼 영역이 줄어들지 않도록 고정 */
+    width: 100%; /* 탭 버튼이 박스 너비를 채우도록 */
+    justify-content: flex-start; /* 탭 버튼을 왼쪽에 정렬 */
 }
 
-.main-layout > .col-md-4:nth-child(3) {
-    flex-grow: 0;
-    flex-shrink: 0;
-    width: auto;
+.nav-pills .nav-link {
+    font-size: 0.9rem;
+    padding: 0.3rem 0.8rem;
+    color: #555;
+    border-radius: 4px;
+}
+
+.nav-pills .nav-link.active {
+    background-color: #007bff;
+    color: #fff;
+}
+
+/* 탭 콘텐츠 스타일링 */
+.tab-content {
+    flex-grow: 1;
+    width: 100%;
+    overflow: hidden; /* 콘텐츠가 박스를 벗어나지 않도록 */
+}
+
+/* 탭 패널 스타일링 */
+.tab-pane {
+    width: 100%;
+    height: 200px; /* 캔버스와 동일한 높이로 고정 */
+    display: none; /* 기본적으로 숨김 */
+}
+
+.tab-pane.active {
+    display: block; /* 활성화된 패널만 표시 */
+}
+
+/* 캔버스 스타일링 */
+canvas {
+    width: 100% !important;
+    height: 100% !important;
 }
 
 /* 개별 박스 크기 지정 */
-.exchange-rate {
-    width: 500px;
-    height: 250px;
-    flex-basis: 250px;
-}
-
 .news {
     width: 500px;
     height: 480px;
@@ -60,30 +92,19 @@ body {
     height: 750px;
 }
 
-/* 탭 관련 스타일 */
-.tab-nav {
-    margin-bottom: 0; /* 하단 마진 제거 */
-    border-bottom: none; /* 밑줄 스타일 간소화 */
-    margin-top: 0; /* 상단 마진 제거 */
+/* 각 컬럼의 Flex-grow 설정으로 컬럼 너비 조정 */
+.main-layout > .col-md-4 {
+    flex-grow: 1;
 }
 
-.nav-link {
-    padding: 0.1rem 0.5rem; /* 높이를 줄이기 위해 상하 패딩 0.1rem으로 축소 */
-    margin: 0 0.25rem; /* 탭 간 간격 유지 */
-    line-height: 1; /* 줄 높이 조정 */
+.main-layout > .col-md-4:nth-child(2) {
+    flex-grow: 1;
 }
 
-.tab-content {
-    width: 100%;
-    margin-top: 0; /* 탭과 콘텐츠 간 간격 최소화 */
-}
-
-.tab-pane {
-    display: none;
-}
-
-.tab-pane.active {
-    display: block;
+.main-layout > .col-md-4:nth-child(3) {
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: auto;
 }
 
 img[alt="Logo"] {
