@@ -1,0 +1,40 @@
+<!-- boardList.html -->
+<div th:fragment="boardTable">
+    <form th:action="@{/admin/board/notice}" method="post" class="mb-3">
+        <input type="text" name="title" class="form-control mb-2" placeholder="공지 제목" required>
+        <textarea name="content" class="form-control mb-2" rows="3" placeholder="공지 내용을 입력하세요" required></textarea>
+        <button type="submit" class="btn btn-warning w-100">공지 등록</button>
+    </form>
+
+    <table class="table table-striped table-bordered text-center align-middle mt-3">
+        <thead class="table-light">
+        <tr>
+            <th>ID</th>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>작성일</th>
+            <th>숨김 여부</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${posts == null or #lists.isEmpty(posts)}">
+            <td colspan="5">게시글이 없습니다.</td>
+        </tr>
+        <tr th:each="post : ${posts}">
+            <td th:text="${post.id}">1</td>
+            <td th:text="${post.title}">샘플 제목</td>
+            <td th:text="${post.author}">작성자</td>
+            <td th:text="${#dates.format(post.createdAt, 'yyyy-MM-dd HH:mm')}">2025-09-09 11:11</td>
+            <td>
+                <form th:action="@{'/admin/board/' + ${post.id} + '/toggle'}" method="post">
+                    <button type="submit"
+                            class="btn"
+                            th:classappend="${post.hidden} ? 'btn-secondary' : 'btn-success'"
+                            th:text="${post.hidden} ? '숨김' : '공개'"> 숨김
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

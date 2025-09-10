@@ -29,7 +29,7 @@ public class AdvertisementService {
 
     public List<AdvertisementDto> getAdverisementList(){
 
-        String sql = "SELECT t FROM advertisement_entity t";
+        String sql = "SELECT t FROM AdvertisementEntity t ORDER BY t.sortNum ASC";
         Query query = em.createQuery(sql);
         List<AdvertisementEntity> advertisementEntityList = query.getResultList();
 
@@ -42,6 +42,16 @@ public class AdvertisementService {
         advertisementDtoList
                 .forEach(x->em.persist(AdvertisementDto.fromDto(x)));
 
+    }
+
+    public void updateAdvertisementOrder(List<AdvertisementDto> orderList) {
+        for (AdvertisementDto dto : orderList) {
+            AdvertisementEntity entity = em.find(AdvertisementEntity.class, dto.getAdventId());
+            if(entity != null){
+                entity.setSortNum(dto.getSortNum());
+            }
+        }
+        em.flush();
     }
 
 }
