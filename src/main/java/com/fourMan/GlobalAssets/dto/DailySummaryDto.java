@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 
@@ -14,29 +15,37 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class DailySummaryDto {
 
-    private Long assetId;
-    private Timestamp timestamp;   // 일자(자정) 기준 타임스탬프
-    private Double price;          // 현재가
-    private Double priceChange;    // 전일대비 금액
-    private Double changePercent;  // 전일대비 등락률
+    private Long id;
+
+    private LocalDate date;
+    //현재가격
+    private BigDecimal price;
+    //전일가격
+    private BigDecimal prevClose;
+    //전일대비 가격변화
+    private BigDecimal delta;
+    //전일대비 등락률
+    private BigDecimal deltaPercent;
 
     public static DailySummaryDto fromEntity(DailySummaryEntity entity) {
         return new DailySummaryDto(
-                entity.getAssetId(),
-                entity.getTimestamp(),
+                entity.getId(),
+                entity.getDate(),
                 entity.getPrice(),
-                entity.getPriceChange(),
-                entity.getChangePercent()
+                entity.getPrevClose(),
+                entity.getDelta(),
+                entity.getDeltaPercent()
         );
     }
 
     public static DailySummaryEntity fromDto(DailySummaryDto dto) {
         DailySummaryEntity entity = new DailySummaryEntity();
-        entity.setAssetId(dto.getAssetId());
-        entity.setTimestamp(dto.getTimestamp());
+        entity.setId(dto.getId());
+        entity.setDate(dto.getDate());
         entity.setPrice(dto.getPrice());
-        entity.setPriceChange(dto.getPriceChange());
-        entity.setChangePercent(dto.getChangePercent());
+        entity.setPrevClose(dto.getPrevClose());
+        entity.setDelta(dto.getDelta());
+        entity.setDeltaPercent(dto.getDeltaPercent());
         return entity;
     }
 
