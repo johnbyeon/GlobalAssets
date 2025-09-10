@@ -7,6 +7,7 @@
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                 <li><a th:href="@{/exchange}" class="nav-link px-2 text-white">환율</a></li>
                 <li><a th:href="@{/stockCoin}" class="nav-link px-2 text-white">주식 / 코인</a></li>
+                <li><a th:href="@{/admin}" class="nav-link px-2 text-white">관리자</a></li>
             </ul>
             <div class="text-end">
                 <a sec:authorize="isAnonymous()" th:href="@{/login}" class="btn btn-outline-light me-2">Login</a>
