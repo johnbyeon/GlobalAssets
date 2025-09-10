@@ -1,0 +1,17 @@
+<!-- imgUp.html -->
+<div th:fragment="imgUploadForm">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-body p-4">
+          <h1 class="card-title text-center mb-4">이미지 업로드</h1>
+          <div class="mb-3">
+            <input type="file" id="fileInput" class="form-control" accept="image/*">
+          </div>
+          <button onclick="uploadFile()" class="btn btn-primary w-100">업로드</button>
+          <div id="preview" class="mt-4 text-center"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,111 +1,147 @@
-// 페이지 로드 시 URL 해시로 탭 활성화
 document.addEventListener('DOMContentLoaded', function() {
+    // URL 해시로 탭 활성화
     const hash = window.location.hash;
-    if(hash) {
-        const tabTrigger = new bootstrap.Tab(document.querySelector(`[data-bs-target="${hash}"]`));
-        tabTrigger.show();
+    const initialTab = hash ? hash.substring(1) : 'user';
+    const initialTabBtn = document.querySelector(`#adminTab button[data-bs-target="#${initialTab}"]`);
+    if(initialTabBtn){
+        new bootstrap.Tab(initialTabBtn).show();
     }
 
-    // 탭 클릭 시 URL 해시에 반영
-    const tabLinks = document.querySelectorAll('#adminTab button[data-bs-toggle="tab"]');
-    tabLinks.forEach(btn => {
-        btn.addEventListener('shown.bs.tab', function (event) {
-            window.location.hash = event.target.getAttribute('data-bs-target');
+    // 탭 클릭 시 콘텐츠 로드 및 URL 해시에 반영
+    document.querySelectorAll('#adminTab button[data-bs-toggle="tab"]').forEach(btn => {
+        btn.addEventListener('shown.bs.tab', e => {
+            const tabId = e.target.getAttribute('data-bs-target').substring(1);
+            window.location.hash = e.target.getAttribute('data-bs-target');
+            loadTabContent(tabId);
         });
     });
+
+    // 처음 활성 탭 로드
+    loadTabContent(initialTab);
 });
 
-const fileInput = document.getElementById("fileInput");
-  const preview = document.getElementById("preview");
+// =======================
+// 탭 AJAX 콘텐츠 로드
+// =======================
+function loadTabContent(tabId){
+    const container = document.getElementById(tabId);
+    if(container.getAttribute('data-loaded')) return;
 
+    let url = '';
+    switch(tabId){
+        case 'user': url='/get/userList'; break;
+        case 'board': url='/get/boardList'; break;
+        case 'image-upload': url='/get/imgUp'; break;
+        case 'advertisement': url='/get/adv'; break;
+        default: return;
+    }
 
-// 로고 이미지 업로드
-  if (fileInput) {
-    // 파일 선택 시 미리보기
-    fileInput.addEventListener("change", function () {
-      const file = fileInput.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          preview.innerHTML = `<img src="${e.target.result}" alt="미리보기" style="max-width:300px;">`;
-        };
-        reader.readAsDataURL(file);
-      } else {
-        preview.innerHTML = "";
-      }
-    });
-  }
+    fetch(url)
+        .then(res => {
+            if(!res.ok) throw new Error('HTTP ' + res.status);
+            return res.text();
+        })
+        .then(html => {
+            container.innerHTML = html;
+            container.setAttribute('data-loaded','true');
 
-  // 파일 업로드
-  async function uploadFile() {
+            if(tabId==='image-upload') initImageUpload();
+            if(tabId==='advertisement') initAdvertisement();
+        })
+        .catch(err => {
+            console.error(err);
+            container.innerHTML = `<div class="alert alert-danger">로드 실패: ${err.message}</div>`;
+        });
+}
+
+// =======================
+// 이미지 업로드 초기화
+// =======================
+function initImageUpload(){
+    const fileInput = document.getElementById("fileInput");
+    const preview = document.getElementById("preview");
+
+    if(fileInput){
+        fileInput.addEventListener("change", function () {
+            const file = fileInput.files[0];
+            if(file){
+                const reader = new FileReader();
+                reader.onload = function(e){
+                    preview.innerHTML = `<img src="${e.target.result}" alt="미리보기" style="max-width:300px;">`;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                preview.innerHTML = "";
+            }
+        });
+    }
+}
+
+async function uploadFile(){
+    const fileInput = document.getElementById("fileInput");
+    const preview = document.getElementById("preview");
+
+    if(!fileInput || !fileInput.files[0]){
+        alert("파일을 선택하세요");
+        return;
+    }
+
     const file = fileInput.files[0];
-    if (!file) {
-      alert("파일을 선택하세요");
-      return;
+
+    try{
+        const res = await fetch("/s3/presigned-url?filename=" + file.name, {method: "POST"});
+        const data = await res.json();
+
+        const put = await fetch(data.url, {
+            method: "PUT",
+            headers: {"Content-Type": data.contentType},
+            body: file
+        });
+
+        if(put.ok){
+            preview.innerHTML = `<div class="alert alert-success mt-3">업로드 완료 ✅</div>`;
+        } else {
+            preview.innerHTML = `<div class="alert alert-danger mt-3">업로드 실패 ❌</div>`;
+        }
+    } catch(err){
+        console.error(err);
+        preview.innerHTML = `<div class="alert alert-danger mt-3">업로드 중 오류 ❌</div>`;
     }
+}
 
-    // Presigned URL 요청
-    const response = await fetch("/s3/presigned-url?filename=" + file.name, {method: "POST"});
-    const data = await response.json();
+// =======================
+// 광고 관리 초기화
+// =======================
+function initAdvertisement(){
+    const sortableEl = document.getElementById('sortable-ads');
+    if(sortableEl) new Sortable(sortableEl, {animation:150});
 
-    // S3 업로드
-    const put = await fetch(data.url, {
-      method: "PUT",
-      headers: {"Content-Type": data.contentType},
-      body: file
+    // 광고 순서 저장 버튼
+    const saveBtn = document.getElementById('saveAdOrderBtn');
+    saveBtn.addEventListener('click', async () => {
+        const list = document.querySelectorAll("#sortable-ads li");
+        const order = Array.from(list).map((item,index)=>({
+            adventId: item.getAttribute("data-id"),
+            sortNum: index+1
+        }));
+
+        const res = await fetch("/admin/advertisement/order", {
+            method: "POST",
+            headers: {"Content-Type":"application/json"},
+            body: JSON.stringify(order)
+        });
+
+        if(res.ok){
+            alert("순서가 저장되었습니다 ✅");
+            location.reload();
+        } else {
+            alert("저장 실패 ❌");
+        }
     });
+}
 
-    if (put.ok) {
-      preview.innerHTML = `<div class="alert alert-success mt-3">업로드 완료되었습니다 ✅</div>`;
-    } else {
-      preview.innerHTML = `<div class="alert alert-danger mt-3">업로드 실패 ❌</div>`;
-    }
-  }
-
-
-
-// 광고 탭
-   // 드래그 앤 드롭 활성화
-    new Sortable(document.getElementById('sortable-ads'), {
-      animation: 150
-    });
-
-    // 순서 저장
-    async function saveAdOrder() {
-      const list = document.querySelectorAll("#sortable-ads li");
-      const order = Array.from(list).map((item, index) => ({
-        adventId: item.getAttribute("data-id"),
-        sortNum: index + 1
-      }));
-
-      const response = await fetch("/admin/advertisement/order", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(order)
-      });
-
-      if (response.ok) {
-        alert("순서가 저장되었습니다 ✅");
-        location.reload();
-      } else {
-        alert("저장 실패 ❌");
-      }
-    }
-
-    // 새 광고 업로드
-    document.getElementById("uploadAdForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const formData = new FormData(e.target);
-
-      const response = await fetch("/admin/advertisement/upload", {
-        method: "POST",
-        body: formData
-      });
-
-      if (response.ok) {
-        alert("광고가 등록되었습니다 ✅");
-        location.reload();
-      } else {
-        alert("업로드 실패 ❌");
-      }
-    });
+// 광고 선택 시 왼쪽 미리보기에 표시
+function showAdPreview(imagePath){
+    const preview = document.getElementById('adPreview');
+    preview.innerHTML = `<img src="${imagePath}" alt="선택 광고" style="max-width:100%; border-radius:6px;">`;
+}
