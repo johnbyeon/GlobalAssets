@@ -1,8 +1,5 @@
 package com.fourMan.GlobalAssets.controller;
 
-import com.fourMan.GlobalAssets.dto.CandleDto;
-import com.fourMan.GlobalAssets.dto.TickerDto;
-import com.fourMan.GlobalAssets.service.StreamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;

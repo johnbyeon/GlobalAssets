@@ -2,7 +2,6 @@ package com.fourMan.GlobalAssets.service;
 
 import com.fourMan.GlobalAssets.entity.AssetsEntity;
 import com.fourMan.GlobalAssets.repository.AssetRepository;
-import com.fourMan.GlobalAssets.util.Symbols;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

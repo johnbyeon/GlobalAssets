@@ -1,6 +1,7 @@
 package com.fourMan.GlobalAssets.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +17,7 @@ import java.io.Serializable;
         },
         uniqueConstraints = @UniqueConstraint(name = "uk_asset_code", columnNames = "code")
 )
+@Builder
 public class AssetsEntity implements Serializable {
 
     @Id

@@ -1,14 +1,17 @@
 package com.fourMan.GlobalAssets.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 @Entity
 @Getter
 @Setter
+@Builder
 public class PricesEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,14 +24,14 @@ public class PricesEntity {
     private Timestamp timestamp;
 
     @Column(nullable = false)
-    private Double open;
+    private BigDecimal open;
 
     @Column(nullable = false)
-    private Double close;
+    private BigDecimal close;
 
     @Column(nullable = false)
-    private Double high;
+    private BigDecimal high;
 
     @Column(nullable = false)
-    private Double low;
+    private BigDecimal low;
 }

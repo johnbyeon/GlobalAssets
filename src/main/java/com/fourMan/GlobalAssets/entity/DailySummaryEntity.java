@@ -1,25 +1,26 @@
 package com.fourMan.GlobalAssets.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-
+@Builder
 @Entity
 @Getter @Setter
-@Table(
-        name = "daily_summary",
-        uniqueConstraints = @UniqueConstraint(
-                name = "uk_daily_summary_asset_date",
-                columnNames = {"asset_id", "summary_date"}
-        ),
-        indexes = {
-                @Index(name = "idx_daily_summary_asset_date", columnList = "asset_id, summary_date")
-        }
-)
+//@Table(
+//        name = "daily_summary",
+//        uniqueConstraints = @UniqueConstraint(
+//                name = "uk_daily_summary_asset_date",
+//                columnNames = {"asset_id", "summary_date"}
+//        ),
+//        indexes = {
+//                @Index(name = "idx_daily_summary_asset_date", columnList = "asset_id, summary_date")
+//        }
+//)
 public class DailySummaryEntity implements Serializable {
 
     @Id
