@@ -90,7 +90,9 @@ canvas {
 .ad {
     width: 250px;
     height: 750px;
+    justify-content: flex-start;
 }
+
 
 /* 각 컬럼의 Flex-grow 설정으로 컬럼 너비 조정 */
 .main-layout > .col-md-4 {

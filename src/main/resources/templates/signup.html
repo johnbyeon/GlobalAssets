@@ -11,7 +11,9 @@
 
 <main class="form-signup w-100 m-auto">
   <form th:object="${dto}" th:action="@{/signupProc}" method="post" onsubmit="return handleFormSubmit(event)">
-    <img class="mb-4" th:src="@{/img/logo.png}" alt="" width="72" height="72">
+    <a th:href="@{/}">
+      <img class="mb-4" th:src="@{/img/logo.png}" alt="홈으로" width="72" height="72">
+    </a>
     <h1 class="h3 mb-3 fw-normal">회원가입</h1>
 
     <div class="form-floating mb-2">
