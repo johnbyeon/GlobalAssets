@@ -49,8 +49,8 @@ public class PricesService {
                 .toList();
     }
 
-    public List<PricesDto> findAllByAssetIdAndTimeStamp(Long assetId,Timestamp timestamp){
-        List<PricesEntity> pricesEntities = pricesDao.findAllByAssetIdAndTimeStamp(assetId,timestamp);
+    public List<PricesDto> findAllByAssetIdAndTimestamp(Long assetId,Timestamp timestamp){
+        List<PricesEntity> pricesEntities = pricesDao.findAllByAssetIdAndTimestamp(assetId,timestamp);
         if(ObjectUtils.isEmpty(pricesEntities)){return null;}
         return pricesEntities.stream()
                 .map(x->PricesDto.fromEntity(x))

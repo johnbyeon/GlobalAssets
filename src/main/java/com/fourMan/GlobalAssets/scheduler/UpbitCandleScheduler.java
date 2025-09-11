@@ -35,7 +35,9 @@ public class UpbitCandleScheduler {
     // 1분마다 실행 (60,000ms)
     @Scheduled(fixedRate = 10000)
     public void fetchOneMinuteCandle() {
-
+            if(ObjectUtils.isEmpty(cryptoAssetsId)){
+                return;
+            }
 
         try {
             for (int i = 0; i < ADMIN.INIT_CRYPTO.CODES.length; i++) {
@@ -53,9 +55,10 @@ public class UpbitCandleScheduler {
                         dto.setOpen(candle.openingPrice());
                         dto.setClose(candle.tradePrice());
                         LocalDateTime ldt = LocalDateTime.parse(candle.candleDateTimeKst(), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+                        log.info("localdatetime값:{} ",ldt);
                         dto.setTimestamp(Timestamp.valueOf(ldt));
                         log.info("dto : {}", dto);
-                        if (ObjectUtils.isEmpty(pricesService.findAllByAssetIdAndTimeStamp(dto.getAssetId(),dto.getTimestamp()))) {
+                        if (ObjectUtils.isEmpty(pricesService.findAllByAssetIdAndTimestamp(dto.getAssetId(),dto.getTimestamp()))) {
                             pricesService.insertPrices(dto);
                         }
                         else {

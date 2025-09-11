@@ -129,8 +129,6 @@ public class WebSocketClientStockService {
                         }
 
                     }
-
-
                 }
                 if (dtos.isEmpty()) {
                     log.warn("데이터 파싱 실패 또는 유효하지 않은 형식: {}", message);
