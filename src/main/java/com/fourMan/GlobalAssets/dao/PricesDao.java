@@ -28,7 +28,7 @@ public class PricesDao {
 
         return prices;
     }
-    public List<PricesEntity> findAllByAssetIdAndTimeStamp(Long assetId, Timestamp timestamp) {
+    public List<PricesEntity> findAllByAssetIdAndTimestamp(Long assetId, Timestamp timestamp) {
         String sql = "SELECT a FROM PricesEntity a " +
                 "WHERE a.assetId = :assetId " +
                 "AND a.timestamp = :timestamp " +

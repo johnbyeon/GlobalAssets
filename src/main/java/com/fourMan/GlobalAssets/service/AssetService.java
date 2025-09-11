@@ -51,6 +51,6 @@ public class AssetService {
     }
 
     public void insertAssets(AssetsDto dto){
-        assetsDao.insertAssetsEntity(AssetsDto.fromDto(dto));
+        assetsDao.insertAssetsEntity(AssetsDto.toEntity(dto));
     }
 }
