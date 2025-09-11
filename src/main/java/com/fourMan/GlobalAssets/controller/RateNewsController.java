@@ -1,13 +1,17 @@
 package com.fourMan.GlobalAssets.controller;
 
-import com.fourMan.GlobalAssets.dto.AssetsDto;
-import com.fourMan.GlobalAssets.service.RateNewsKey;
+import com.fourMan.GlobalAssets.dto.RateNewsItem;
 import com.fourMan.GlobalAssets.service.RateNewsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -16,43 +20,40 @@ public class RateNewsController {
 
     private final RateNewsService newsService;
 
-    // ★ 신규: 자산 + 뉴스 번들
-    @GetMapping(value = "/rate/api/assets/{assetId}/news", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public AssetsDto assetWithNews(@PathVariable Long assetId,
-                                   @RequestParam(defaultValue = "15") int limit) {
-        return newsService.assetWithNews(assetId, limit);
+    // 메인 경제 뉴스 페이지
+    @GetMapping("/rate/rate_news_main")
+    public String newsEconomyPage(@RequestParam(defaultValue = "15") int limit, Model model) {
+        List<RateNewsItem> items = newsService.searchEconomy(limit);
+        sortAndRenumber(items);
+        model.addAttribute("title", "ECONOMY");
+        model.addAttribute("items", items);
+        return "rate/rate_news_main";
     }
 
-    // (유지) 심볼/코드로도 번들 제공
-    @GetMapping(value = "/rate/api/assets/by", produces = MediaType.APPLICATION_JSON_VALUE, params = {"q"})
-    @ResponseBody
-    public AssetsDto assetWithNewsByQuery(@RequestParam("q") String symbolOrCode,
-                                          @RequestParam(defaultValue = "15") int limit) {
-        return newsService.assetWithNewsBySymbolOrCode(symbolOrCode, limit);
+    // 특정 자산(차트 옆): asset_id로 뉴스 10개
+    @GetMapping("/rate/news/by-asset/{assetId}")
+    public String newsByAssetPage(@PathVariable long assetId,
+                                  @RequestParam(defaultValue = "10") int limit,
+                                  Model model) {
+        List<RateNewsItem> items = newsService.searchByAssetId(assetId, limit);
+        sortAndRenumber(items);
+        model.addAttribute("title", "ASSET#" + assetId);
+        model.addAttribute("items", items);
+        return "rate/rate_news_main";
     }
 
-    // (기존 유지) 필요 시 사용중인 API들
-    @GetMapping(value = "/rate/api/news/{key}", produces = MediaType.APPLICATION_JSON_VALUE)
+    // JSON API
     @ResponseBody
-    public List<RateNewsItem> newsByKeyApi(@PathVariable RateNewsKey key,
-                                           @RequestParam(defaultValue = "15") int limit) {
-        // 프리셋 섹션은 자산 독립적 → 기존 형태 유지
-        return newsService.searchPreset(key, limit);
+    @GetMapping(value = "/rate/api/news/by-asset/{assetId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<RateNewsItem> apiNewsByAsset(@PathVariable long assetId,
+                                             @RequestParam(defaultValue = "10") int limit) {
+        return newsService.searchByAssetId(assetId, limit);
     }
 
-    @GetMapping(value = "/rate/api/news", produces = MediaType.APPLICATION_JSON_VALUE, params = "symbol")
-    @ResponseBody
-    public AssetsDto newsBySymbolBundle(@RequestParam String symbol,
-                                        @RequestParam(defaultValue = "15") int limit) {
-        // 과거에는 List<RateNewsItem> 반환이었을 수 있으나,
-        // 이제는 번들을 원하는 경우 이 엔드포인트를 사용
-        return newsService.assetWithNewsBySymbolOrCode(symbol, limit);
-    }
-
-    @GetMapping(value = "/rate/api/news/economy", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public List<RateNewsItem> apiNewsEconomy(@RequestParam(defaultValue = "15") int limit) {
-        return newsService.searchEconomy(limit);
+    // 정렬/번호 재부여 (빈 번호가 뒤로 가도록)
+    private void sortAndRenumber(List<RateNewsItem> items) {
+        if (items == null) return;
+        items.sort(Comparator.comparingInt(it -> it.getNo() == 0 ? Integer.MAX_VALUE : it.getNo()));
+        for (int i = 0; i < items.size(); i++) items.get(i).setNo(i + 1);
     }
 }
