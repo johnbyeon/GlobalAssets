@@ -9,6 +9,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Component
@@ -17,7 +18,7 @@ public class PricesDao {
     @Autowired
     EntityManager em;
     public List<PricesEntity> findAllByAssetId(Long assetId) {
-        String sql = "SELECT a FROM PriceEntity a " +
+        String sql = "SELECT a FROM PricesEntity a " +
                 "WHERE a.assetId = :assetId " +
                 "ORDER BY a.priceId DESC";
 
@@ -27,7 +28,17 @@ public class PricesDao {
 
         return prices;
     }
+    public List<PricesEntity> findAllByAssetIdAndTimeStamp(Long assetId, Timestamp timestamp) {
+        String sql = "SELECT a FROM PricesEntity a " +
+                "WHERE a.assetId = :assetId " +
+                "AND a.timestamp = :timestamp " +
+                "ORDER BY a.priceId DESC";
 
+        return em.createQuery(sql, PricesEntity.class)
+                .setParameter("assetId", assetId)
+                .setParameter("timestamp", timestamp)
+                .getResultList();
+    }
     public PricesEntity getOneAssetsEntity(Long id) {
         return em.find(PricesEntity.class,id);
     }
