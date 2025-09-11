@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="${title}">뉴스</title>
+    <style>
+        body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+        header { padding: 10px 12px; border-bottom:1px solid #e5e7eb; font-weight:600; }
+        .list { padding: 10px 12px; }
+        .item { padding: 6px 0; }
+        a.title { color:#111; text-decoration:none; }
+        a.title:hover { text-decoration:underline; }
+        .sep { color:#bbb; letter-spacing:1px; }
+    </style>
+</head>
+<body>
+<header th:text="${title}">NEWS</header>
+<div class="list">
+    <div th:if="${#lists.isEmpty(items)}">결과가 없습니다.</div>
+    <div th:each="it : ${items}" class="item" th:if="${!#lists.isEmpty(items)}">
+        <span th:text="${it.no}">1</span>
+        <span class="sep"> / </span>
+        <a class="title" th:href="${it.link}" target="_blank" rel="noopener" th:text="${it.title}">기사 제목</a>
+        <span class="sep"> / </span>
+        <span th:text="${it.time}">2025-09-09 09:00</span>
+        <div class="sep">--------------------------------</div>
+    </div>
+</div>
+</body>
+</html>
