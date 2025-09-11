@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 @Data
@@ -18,13 +19,13 @@ public class PricesDto {
 
     private Timestamp timestamp;
 
-    private Double open;
+    private BigDecimal open;
 
-    private Double close;
+    private BigDecimal close;
 
-    private Double high;
+    private BigDecimal high;
 
-    private Double low;
+    private BigDecimal low;
     public static PricesDto fromEntity(PricesEntity entity) {
         return new PricesDto(
                 entity.getPriceId(),
@@ -39,14 +40,16 @@ public class PricesDto {
 
     // DTO -> Article
     public static PricesEntity fromDto(PricesDto dto) {
-        PricesEntity entity = new PricesEntity();
-        entity.setPriceId(dto.getPriceId());
-        entity.setAssetId(dto.getAssetId());
-        entity.setTimestamp(dto.getTimestamp());
-        entity.setOpen(dto.getOpen());
-        entity.setClose(dto.getClose());
-        entity.setHigh(dto.getHigh());
-        entity.setLow(dto.getLow());
+        PricesEntity entity = PricesEntity.builder()
+                .priceId(dto.getPriceId())
+                .assetId(dto.getAssetId())
+                .timestamp(dto.getTimestamp())
+                .open(dto.getOpen())
+                .close(dto.getClose())
+                .high(dto.getHigh())
+                .low(dto.getLow())
+                .build();
+
         return entity;
     }
 }

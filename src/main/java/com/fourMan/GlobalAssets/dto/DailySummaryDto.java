@@ -1,4 +1,3 @@
-// src/main/java/com/fourMan/GlobalAssets/dto/DailySummaryDto.java
 package com.fourMan.GlobalAssets.dto;
 
 import com.fourMan.GlobalAssets.entity.DailySummaryEntity;
@@ -39,29 +38,30 @@ public class DailySummaryDto {
     }
 
     public static DailySummaryEntity fromDto(DailySummaryDto dto) {
-        DailySummaryEntity entity = new DailySummaryEntity();
-        entity.setId(dto.getId());
-        entity.setDate(dto.getDate());
-        entity.setPrice(dto.getPrice());
-        entity.setPrevClose(dto.getPrevClose());
-        entity.setDelta(dto.getDelta());
-        entity.setDeltaPercent(dto.getDeltaPercent());
+        DailySummaryEntity entity = DailySummaryEntity.builder()
+                .id(dto.getId())
+                .date(dto.getDate())
+                .price(dto.getPrice())
+                .prevClose(dto.getPrevClose())
+                .delta(dto.getDelta())
+                .deltaPercent(dto.getDeltaPercent())
+                .build();
         return entity;
     }
 
-    /* ===== 화면(Thymeleaf)용 파생 게터 ===== */
-
-    /** 템플릿에서 ${r.date} 로 쓰는 값 (LocalDate) */
-    public LocalDate getDate() {
-        return timestamp == null ? null : timestamp.toLocalDateTime().toLocalDate();
-    }
-
-    /** 템플릿의 ${r.change} 호환 (priceChange 별칭) */
-    public Double getChange() {
-        return priceChange;
-    }
-
-    /** 상승/하락 아이콘용 */
-    public boolean isUp()   { return priceChange != null && priceChange > 0; }
-    public boolean isDown() { return priceChange != null && priceChange < 0; }
+//    /* ===== 화면(Thymeleaf)용 파생 게터 ===== */
+//
+//    /** 템플릿에서 ${r.date} 로 쓰는 값 (LocalDate) */
+//    public LocalDate getDate() {
+//        return timestamp == null ? null : timestamp.toLocalDateTime().toLocalDate();
+//    }
+//
+//    /** 템플릿의 ${r.change} 호환 (priceChange 별칭) */
+//    public Double getChange() {
+//        return priceChange;
+//    }
+//
+//    /** 상승/하락 아이콘용 */
+//    public boolean isUp()   { return priceChange != null && priceChange > 0; }
+//    public boolean isDown() { return priceChange != null && priceChange < 0; }
 }

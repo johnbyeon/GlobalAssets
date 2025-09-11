@@ -26,6 +26,7 @@ public class SignupService {
         if (isUser) {
             return;
         }
+
         // 2. 없으면 비밀번호를 암호화 해서 저장하기
         UserEntity newUser = new UserEntity();
         newUser.setEmail(signupDto.getEmail());

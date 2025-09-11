@@ -1,15 +1,35 @@
 package com.fourMan.GlobalAssets.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 @Entity
 @Getter
 @Setter
+@Builder
+
 public class PricesEntity {
+
+    public PricesEntity(){
+
+    }
+
+    public PricesEntity(Long priceId, Long assetId, Timestamp timestamp, BigDecimal open, BigDecimal close, BigDecimal high, BigDecimal low) {
+        this.priceId = priceId;
+        this.assetId = assetId;
+        this.timestamp = timestamp;
+        this.open = open;
+        this.close = close;
+        this.high = high;
+        this.low = low;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long priceId;
@@ -21,14 +41,14 @@ public class PricesEntity {
     private Timestamp timestamp;
 
     @Column(nullable = false)
-    private Double open;
+    private BigDecimal open;
 
     @Column(nullable = false)
-    private Double close;
+    private BigDecimal close;
 
     @Column(nullable = false)
-    private Double high;
+    private BigDecimal high;
 
     @Column(nullable = false)
-    private Double low;
+    private BigDecimal low;
 }
