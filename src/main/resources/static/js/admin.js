@@ -78,36 +78,44 @@ function initImageUpload(){
 }
 
 async function uploadFile(){
-    const fileInput = document.getElementById("fileInput");
-    const preview = document.getElementById("preview");
-
-    if(!fileInput || !fileInput.files[0]){
-        alert("파일을 선택하세요");
-        return;
-    }
-
     const file = fileInput.files[0];
+            const link = linkInput.value.trim();
 
-    try{
-        const res = await fetch("/s3/presigned-url?filename=" + file.name, {method: "POST"});
-        const data = await res.json();
+            if (!file) {
+                alert("파일을 선택하세요");
+                return;
+            }
+            if (!link) {
+                alert("광고 링크 URL을 입력하세요");
+                return;
+            }
 
-        const put = await fetch(data.url, {
-            method: "PUT",
-            headers: {"Content-Type": data.contentType},
-            body: file
-        });
+            // FormData로 파일과 링크 전송
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("linkPath", link);
 
-        if(put.ok){
-            preview.innerHTML = `<div class="alert alert-success mt-3">업로드 완료 ✅</div>`;
-        } else {
-            preview.innerHTML = `<div class="alert alert-danger mt-3">업로드 실패 ❌</div>`;
-        }
-    } catch(err){
-        console.error(err);
-        preview.innerHTML = `<div class="alert alert-danger mt-3">업로드 중 오류 ❌</div>`;
-    }
+            // Presigned URL 요청
+            const response = await fetch(`/s3/presigned-url?filename=${file.name}`, {
+                method: "POST",
+                body: formData
+            });
+            const data = await response.json();
+
+            // S3 업로드
+            const put = await fetch(data.url, {
+                method: "PUT",
+                headers: {"Content-Type": data.contentType},
+                body: file
+            });
+
+            if (put.ok) {
+                preview.innerHTML = `<div class="alert alert-success mt-3">업로드 완료되었습니다 ✅</div>`;
+            } else {
+                preview.innerHTML = `<div class="alert alert-danger mt-3">업로드 실패 ❌</div>`;
+            }
 }
+
 
 // =======================
 // 광고 관리 초기화
