@@ -8,7 +8,25 @@
     <link rel="stylesheet" th:href="@{/css/stockCoin.css}">
 </head>
 <body>
-<div id="header"></div>
+<header class="p-1 text-bg-dark">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a th:href="@{/}" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                <img th:src="@{/image/{filename}(filename='logo.png')}" alt="Logo">
+            </a>
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                <li><a th:href="@{/exchange}" class="nav-link px-2 text-white">환율</a></li>
+                <li><a th:href="@{/stockCoin}" class="nav-link px-2 text-white">주식 / 코인</a></li>
+                <li><a th:href="@{/admin}" class="nav-link px-2 text-white">관리자</a></li>
+            </ul>
+            <div class="text-end">
+                <a sec:authorize="isAnonymous()" th:href="@{/login}" class="btn btn-outline-light me-2">Login</a>
+                <a sec:authorize="isAnonymous()" th:href="@{/signup}" class="btn btn-warning">Sign-up</a>
+                <a sec:authorize="isAuthenticated()" th:href="@{/logout}" class="btn btn-outline-light me-2">Logout</a>
+            </div>
+        </div>
+    </div>
+</header>
 
 <main class="container py-4">
     <div class="row g-4 main-layout d-flex justify-content-center">
@@ -47,25 +65,31 @@
 
         <!-- 우측 컬럼: 광고 -->
         <div class="col-12 col-md-4">
-                <div class="content-box ad"
-                     style="width: 250px; height: 750px;">
-                    <div class="ad-section">
-                        <a th:each="ad, iterStat : ${dtoList}"
-                           th:href="${ad.linkPath}" target="_blank"
-                           class="ad-item"
-                           th:style="${iterStat.index == 0} ? 'display:block;' : 'display:none;'">
-                            <img th:src="@{/image/{filename}(filename=${ad.imagePath})}"
-                                 style="width: 200px; height: auto; margin: 5px;" />
-                        </a>
-                    </div>
+            <div class="content-box ad" style="width: 250px; height: 750px;">
+                <div class="ad-section">
+                    <a th:each="ad, iterStat : ${dtoList}"
+                       th:href="${ad.linkPath}" target="_blank"
+                       class="ad-item"
+                       th:style="${iterStat.index == 0} ? 'display:block;' : 'display:none;'">
+                        <img th:src="@{/image/{filename}(filename=${ad.imagePath})}"
+                             style="width: 200px; height: auto; margin: 5px;" />
+                    </a>
                 </div>
             </div>
-
         </div>
     </div>
 </main>
 
-<div id="footer"></div>
+<footer class="container py-3 my-4">
+    <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Home</a></li>
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Features</a></li>
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Pricing</a></li>
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">FAQs</a></li>
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">About</a></li>
+    </ul>
+    <p class="text-center text-body-secondary">© 2025 Company, Inc</p>
+</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -78,8 +102,6 @@
     /*]]>*/
 </script>
 
-<script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/stockCoin.js}"></script>
-<script th:src="@{/js/ad-rotation.js}"></script>
 </body>
 </html>
