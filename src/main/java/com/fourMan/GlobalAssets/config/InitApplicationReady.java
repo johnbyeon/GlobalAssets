@@ -39,6 +39,17 @@ public class InitApplicationReady implements ApplicationListener<ApplicationRead
               assetService.insertAssets(assetsdto);
           }
         }
+        for(int i=0;i<ADMIN.INIT_STOCK.SYMBOLS.length;i++){
+            AssetsDto dto = assetService.findOneSymbol(ADMIN.INIT_STOCK.SYMBOLS[i]);
+            if(ObjectUtils.isEmpty(dto)){
+                AssetsDto assetsdto =new AssetsDto();
+                assetsdto.setCode(ADMIN.INIT_STOCK.CODES[i]);
+                assetsdto.setSymbol(ADMIN.INIT_STOCK.SYMBOLS[i]);
+                assetsdto.setName(ADMIN.INIT_STOCK.NAMES[i]);
+                assetsdto.setCategory(ADMIN.INIT_STOCK.CATEGORY);
+                assetService.insertAssets(assetsdto);
+            }
+        }
 
         if (ObjectUtils.isEmpty(cryptoAssetsId)){
             log.info("cryptoAssetsId: 비었음");

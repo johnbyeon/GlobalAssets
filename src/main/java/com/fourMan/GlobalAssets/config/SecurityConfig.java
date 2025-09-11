@@ -23,13 +23,11 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/", "/login", "/signup", "/signupProc", "/home").permitAll()
-                        .requestMatchers("/css/**", "/js/**", "/img/**").permitAll()//
+                        .requestMatchers("/css/**", "/js/**", "/img/**","/chart/**").permitAll()//
                         .requestMatchers("/fragments/header","/fragments/footer").permitAll()
                         .requestMatchers("/image/**").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .requestMatchers("/my/**").hasAnyRole("ADMIN", "USER")
-                        .requestMatchers("/chart/**").permitAll()
-                        .requestMatchers("/*").permitAll()
                         .requestMatchers("/start/*").permitAll()
                         .anyRequest().authenticated()
                 );
