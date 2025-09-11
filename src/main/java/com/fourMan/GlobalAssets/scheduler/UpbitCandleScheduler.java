@@ -30,32 +30,37 @@ public class UpbitCandleScheduler {
     private final UpbitCandleClientService candleClient;
     private final AssetService assetService;
     private final PricesService pricesService;
-    public static Map<String,Long> cryptoAssetsId = new HashMap<>();
+    public static Map<String, Long> cryptoAssetsId = new HashMap<>();
+
     // 1분마다 실행 (60,000ms)
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(fixedRate = 10000)
     public void fetchOneMinuteCandle() {
 
 
         try {
-            for(int i =0;i<ADMIN.INIT_CRYPTO.CODES.length;i++){
+            for (int i = 0; i < ADMIN.INIT_CRYPTO.CODES.length; i++) {
                 UpbitMinuteCandleDto[] candles = candleClient.fetchOneMinuteAgo(ADMIN.INIT_CRYPTO.CODES[i], 1);
                 if (candles != null && candles.length > 0) {
                     UpbitMinuteCandleDto candle = candles[0];
                     log.info("📊 Upbit Candle - Market: {}, Time: {}, highPrice: {}, lowPrice: {}, openingPrice: {}, tradePrice: {}",
-                            candle.market(), candle.candleDateTimeKst(), candle.highPrice(), candle.lowPrice() ,candle.openingPrice(), candle.tradePrice());
+                            candle.market(), candle.candleDateTimeKst(), candle.highPrice(), candle.lowPrice(), candle.openingPrice(), candle.tradePrice());
                     Long assetid = cryptoAssetsId.get(ADMIN.INIT_CRYPTO.CODES[i]);
-                if(!ObjectUtils.isEmpty(assetid))
-                    {
-                    PricesDto dto = new PricesDto();
-                    dto.setAssetId(assetid);
-                    dto.setHigh(candle.highPrice());
-                    dto.setLow(candle.lowPrice());
-                    dto.setOpen(candle.openingPrice());
-                    dto.setClose(candle.tradePrice());
-                    LocalDateTime ldt = LocalDateTime.parse(candle.candleDateTimeKst(), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-                    dto.setTimestamp(Timestamp.valueOf(ldt));
-                    log.info("dto : {}",dto);
-                    pricesService.insertPrices(dto);
+                    if (!ObjectUtils.isEmpty(assetid)) {
+                        PricesDto dto = new PricesDto();
+                        dto.setAssetId(assetid);
+                        dto.setHigh(candle.highPrice());
+                        dto.setLow(candle.lowPrice());
+                        dto.setOpen(candle.openingPrice());
+                        dto.setClose(candle.tradePrice());
+                        LocalDateTime ldt = LocalDateTime.parse(candle.candleDateTimeKst(), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+                        dto.setTimestamp(Timestamp.valueOf(ldt));
+                        log.info("dto : {}", dto);
+                        if (ObjectUtils.isEmpty(pricesService.findAllByAssetIdAndTimeStamp(dto.getAssetId(),dto.getTimestamp()))) {
+                            pricesService.insertPrices(dto);
+                        }
+                        else {
+                            log.warn("⚠ 코인데이터 중복으로 데이터 만들지 않음");
+                        }
                     }
 
                 } else {
