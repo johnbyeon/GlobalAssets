@@ -13,8 +13,10 @@ import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -25,26 +27,26 @@ public class PricesController {
     private final AssetService assetService;
 
     @GetMapping("/chart/{assetname}")
-    public String getChartData(@PathVariable("assetname")String assetname, Model model){
+    @ResponseBody
+    public List<PricesDto> getChartData(@PathVariable("assetname") String assetname) {
         assetname = assetname.toUpperCase();
         log.info("assetname data : {}", assetname);
-        //해당asset이 코인이라면?
-        for(int i =0; i < ADMIN.INIT_CRYPTO.EN_SYMBOLS.length;i++){
-            if (assetname.equals(ADMIN.INIT_CRYPTO.EN_SYMBOLS[i])){
-                String Simbol = ADMIN.INIT_CRYPTO.SYMBOLS[i];
-                log.info("Simbol data : {}", Simbol);
-                AssetsDto dto = assetService.findOneSymbol(Simbol);
+
+        for (int i = 0; i < ADMIN.INIT_CRYPTO.EN_SYMBOLS.length; i++) {
+            if (assetname.equals(ADMIN.INIT_CRYPTO.EN_SYMBOLS[i])) {
+                String simbol = ADMIN.INIT_CRYPTO.SYMBOLS[i];
+                log.info("Simbol data : {}", simbol);
+
+                AssetsDto dto = assetService.findOneSymbol(simbol);
                 log.info("AssetsDto data : {}", dto);
-                if(!ObjectUtils.isEmpty(dto)){
+
+                if (!ObjectUtils.isEmpty(dto)) {
                     List<PricesDto> dtoList = pricesService.findTop20ByAssetIdOrderByTimestampDesc(dto.getId());
                     log.info("DTO내의 data : {}", dtoList);
-
-                    model.addAttribute("dtos",dtoList);
-
-                    return "chart";
+                    return dtoList;  // JSON으로 자동 변환됨
                 }
             }
         }
-        return "chart";
+        return Collections.emptyList();
     }
 }
