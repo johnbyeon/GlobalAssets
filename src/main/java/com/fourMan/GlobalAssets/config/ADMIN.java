@@ -15,12 +15,13 @@ public interface ADMIN {
 
         String KR_TRID = "H0STCNT0";
         String CATEGORY = "STOCK";
-        String[] TR_ID = new String[]{"H0STCNT0", "H0STCNT0", "H0STCNT0"};
-        String[] SYMBOLS = new String[]{"SAMSUNG", "SK", "LG"};
-        String[] NAMES = new String[]{"삼성전자", "SK하이닉스", "LG에너지솔루션"};
-        String[] CODES = new String[]{"005930", "000660", "373220"};
-        String[] EN_SYMBOLS = new String[]{"SAMSUNG", "SK", "LG"};
+        String[] SYMBOLS = new String[]{"SAMSUNG_ELECTRONICS", "SK_HYNIX", "LG_ENERGY", "SAMSUNG_BIOLOGICS", "HANWHA_AEROSPACE"};
+        String[] NAMES = new String[]{"삼성전자", "SK하이닉스", "LG에너지솔루션", "삼성바이오로직스", "한화에어로스페이스"};
+        String[] CODES = new String[]{"005930", "000660", "373220", "207940", "012450"};
+        String[] EN_SYMBOLS = new String[]{"SAMSUNG_ELECTRONICS", "SK_HYNIX", "LG_ENERGY", "SAMSUNG_BIOLOGICS","HANWHA_AEROSPACE"};
+
     }
+
     interface INIT_EN_STOCK {
         //    <미국 야간거래/아시아 주간거래 - 무료시세>
         //    D+시장구분(3자리)+종목코드
@@ -49,9 +50,8 @@ public interface ADMIN {
         //    BAY : 뉴욕(주간), BAQ : 나스닥(주간). BAA : 아멕스(주간)
         String EN_TRID = "HDFSCNT0";
         String CATEGORY = "STOCK";
-        String[] TR_ID = new String[]{"HDFSCNT0", "HDFSCNT0", "HDFSCNT0"};
         String[] SYMBOLS = new String[]{"AAPL", "NVDA", "TSLA"};
-        String[] NAMES = new String[]{"애플","엔비디아","테슬라"};
+        String[] NAMES = new String[]{"애플", "엔비디아", "테슬라"};
         String[] CODES = new String[]{"RBAQAAPL", "RBAQNVDA", "RBAQTSLA"};
         String[] EN_SYMBOLS = new String[]{"AAPL", "NVDA", "TSLA"};
     }

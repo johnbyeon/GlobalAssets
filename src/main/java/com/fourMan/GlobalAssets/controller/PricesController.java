@@ -15,9 +15,8 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-
-import java.util.Collections;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 import java.util.List;
 
 @Slf4j
@@ -43,6 +42,10 @@ public class PricesController {
                 priceWithAssetDto.setAssetsDto(dto);
                 if (!ObjectUtils.isEmpty(dto)) {
                     List<PricesDto> dtoList = pricesService.findTop20ByAssetIdOrderByTimestampDesc(dto.getId());
+                    dtoList = dtoList.stream()
+                            .sorted(Comparator.comparing(PricesDto::getPriceId))
+                            .collect(Collectors.toList());
+                    //Collections.reverse(dtoList);
                     log.info("DTO내의 data : {}", dtoList);
                     priceWithAssetDto.setPricesDtoList(dtoList);
                     return priceWithAssetDto;  // JSON으로 자동 변환됨
@@ -50,5 +53,10 @@ public class PricesController {
             }
         }
         return priceWithAssetDto;
+    }
+    @GetMapping("/chart-page/{assetname}")
+    public String chartPage(@PathVariable String assetname, Model model) {
+        model.addAttribute("assetname", assetname.toUpperCase());
+        return "charts"; // 위 Thymeleaf 템플릿 파일명
     }
 }

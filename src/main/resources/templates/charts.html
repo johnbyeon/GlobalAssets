@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Candlestick Demo</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-financial"></script>
+    <style>
+        body { max-width: 960px; margin: 20px auto; font-family: sans-serif; }
+
+    </style>
+</head>
+<body>
+<h2 th:text="'캔들차트 - ' + ${assetname}">캔들차트</h2>
+
+<div id="wrap">
+    <canvas id="candle"></canvas>
+</div>
+<div id="empty">표시할 데이터가 없습니다.</div>
+
+<script th:inline="javascript">
+
+</script>
+</body>
+</html>
