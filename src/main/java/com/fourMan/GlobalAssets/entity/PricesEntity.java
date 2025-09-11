@@ -16,7 +16,7 @@ import java.sql.Timestamp;
 
 public class PricesEntity {
 
-    PricesEntity(){
+    public PricesEntity(){
 
     }
 
@@ -48,16 +48,6 @@ public class PricesEntity {
 
     @Column(nullable = false)
     private BigDecimal high;
-
-    public PricesEntity(Long priceId, Long assetId, Timestamp timestamp, BigDecimal open, BigDecimal close, BigDecimal high, BigDecimal low) {
-        this.priceId = priceId;
-        this.assetId = assetId;
-        this.timestamp = timestamp;
-        this.open = open;
-        this.close = close;
-        this.high = high;
-        this.low = low;
-    }
 
     @Column(nullable = false)
     private BigDecimal low;
