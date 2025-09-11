@@ -2,6 +2,7 @@ package com.fourMan.GlobalAssets.controller;
 
 import com.fourMan.GlobalAssets.config.ADMIN;
 import com.fourMan.GlobalAssets.dto.AssetsDto;
+import com.fourMan.GlobalAssets.dto.PriceWithAssetDto;
 import com.fourMan.GlobalAssets.dto.PricesDto;
 import com.fourMan.GlobalAssets.service.AssetService;
 import com.fourMan.GlobalAssets.service.PricesService;
@@ -28,10 +29,10 @@ public class PricesController {
 
     @GetMapping("/chart/{assetname}")
     @ResponseBody
-    public List<PricesDto> getChartData(@PathVariable("assetname") String assetname) {
+    public PriceWithAssetDto getChartData(@PathVariable("assetname") String assetname) {
         assetname = assetname.toUpperCase();
         log.info("assetname data : {}", assetname);
-
+        PriceWithAssetDto priceWithAssetDto = new PriceWithAssetDto();
         for (int i = 0; i < ADMIN.INIT_CRYPTO.EN_SYMBOLS.length; i++) {
             if (assetname.equals(ADMIN.INIT_CRYPTO.EN_SYMBOLS[i])) {
                 String simbol = ADMIN.INIT_CRYPTO.SYMBOLS[i];
@@ -39,14 +40,15 @@ public class PricesController {
 
                 AssetsDto dto = assetService.findOneSymbol(simbol);
                 log.info("AssetsDto data : {}", dto);
-
+                priceWithAssetDto.setAssetsDto(dto);
                 if (!ObjectUtils.isEmpty(dto)) {
                     List<PricesDto> dtoList = pricesService.findTop20ByAssetIdOrderByTimestampDesc(dto.getId());
                     log.info("DTO내의 data : {}", dtoList);
-                    return dtoList;  // JSON으로 자동 변환됨
+                    priceWithAssetDto.setPricesDtoList(dtoList);
+                    return priceWithAssetDto;  // JSON으로 자동 변환됨
                 }
             }
         }
-        return Collections.emptyList();
+        return priceWithAssetDto;
     }
 }

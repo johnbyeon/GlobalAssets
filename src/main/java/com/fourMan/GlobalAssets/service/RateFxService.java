@@ -1,139 +1,151 @@
 package com.fourMan.GlobalAssets.service;
 
+import com.fourMan.GlobalAssets.config.RateTwelveClient;
 import com.fourMan.GlobalAssets.dto.DailySummaryDto;
-import com.fourMan.GlobalAssets.entity.AssetsEntity;
 import com.fourMan.GlobalAssets.entity.DailySummaryEntity;
-import com.fourMan.GlobalAssets.repository.AssetsRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import com.fourMan.GlobalAssets.repository.RateDailySummaryRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class RateFxService {
 
-    private final AssetsRepository assetsRepo;
+    private final RateTwelveClient twelve;
+    private final RateDailySummaryRepository dailyRepo;
 
-    @PersistenceContext
-    private EntityManager em;
+    // 자산ID 매핑 (미설정 시 기본값 사용)
+    @Value("${app.fx.asset.usd:1}") private Long usdAssetId;
+    @Value("${app.fx.asset.jpy:2}") private Long jpyAssetId;
+    @Value("${app.fx.asset.eur:3}") private Long eurAssetId;
+    @Value("${app.fx.asset.cny:4}") private Long cnyAssetId;
+    @Value("${app.fx.asset.gbp:5}") private Long gbpAssetId;
 
-    /**
-     * 심볼/코드로 자산을 찾고, 해당 자산의 최근 N개 일간요약을 조회한다.
-     * - 엔티티/레포 고정 원칙: 네이티브 쿼리 + 엔티티 매핑으로 조회 (레포 시그니처에 의존 X)
-     * - 반환은 DTO로 변환 후 날짜 오름차순(차트용)
-     */
+    // 심볼 매핑 (미설정 시 기본값 사용)
+    @Value("${app.fx.symbol.usd:USD/KRW}") private String usdSymbol;
+    @Value("${app.fx.symbol.jpy:JPY/KRW}") private String jpySymbol;
+    @Value("${app.fx.symbol.eur:EUR/KRW}") private String eurSymbol;
+    @Value("${app.fx.symbol.cny:CNY/KRW}") private String cnySymbol;
+    @Value("${app.fx.symbol.gbp:GBP/KRW}") private String gbpSymbol;
+
+    /* ========================= 수집/업서트 ========================= */
+
+    @Transactional
+    public void ingest(String symbol, int days) {
+        Long assetId = resolveAssetId(symbol);
+        ingest(assetId, symbol, days);
+    }
+
+    @Transactional
+    public void refreshAll(int days) {
+        ingest(usdAssetId, usdSymbol, days);
+        ingest(jpyAssetId, jpySymbol, days);
+        ingest(cnyAssetId, cnySymbol, days);
+        ingest(eurAssetId, eurSymbol, days);
+        ingest(gbpAssetId, gbpSymbol, days);
+    }
+
+    @Transactional
+    public void ingest(Long assetId, String symbol, int days) {
+        List<RateTwelveClient.Bar> bars = twelve.fetchDailySeries(symbol, days);
+        if (bars.isEmpty()) {
+            log.warn("[FX] No data from TwelveData: {}", symbol);
+            return;
+        }
+        BigDecimal prevClose = null;
+        for (RateTwelveClient.Bar b : bars) {
+            LocalDate date  = b.date();
+            BigDecimal close = b.close();
+
+            BigDecimal chg = null;
+            BigDecimal pct = null;
+            if (prevClose != null && prevClose.compareTo(BigDecimal.ZERO) != 0) {
+                chg = close.subtract(prevClose);
+                pct = chg.multiply(BigDecimal.valueOf(100))
+                        .divide(prevClose, 4, RoundingMode.HALF_UP);
+            }
+            upsertDaily(assetId, date, prevClose, close, chg, pct);
+            prevClose = close;
+        }
+        log.info("[FX] Upsert done: {} ({} rows)", symbol, bars.size());
+    }
+
+    private void upsertDaily(Long assetId, LocalDate date,
+                             BigDecimal prevClose, BigDecimal price,
+                             BigDecimal change, BigDecimal changePct) {
+        dailyRepo.findByAssetIdAndDate(assetId, date).ifPresentOrElse(ds -> {
+            if (prevClose != null) ds.setPrevClose(prevClose);
+            if (price != null) ds.setPrice(price);
+            if (change != null) ds.setPriceChange(change);
+            if (changePct != null) ds.setChangePercent(changePct);
+            dailyRepo.save(ds);
+        }, () -> {
+            DailySummaryEntity ds = new DailySummaryEntity();
+            ds.setAssetId(assetId);
+            ds.setDate(date);
+            ds.setPrevClose(prevClose);
+            ds.setPrice(price != null ? price : BigDecimal.ZERO);
+            ds.setPriceChange(change != null ? change : BigDecimal.ZERO);
+            ds.setChangePercent(changePct != null ? changePct : BigDecimal.ZERO);
+            dailyRepo.save(ds);
+        });
+    }
+
+    /* ========================= 조회/DTO ========================= */
+
     @Transactional(readOnly = true)
-    public List<DailySummaryDto> recentDaily(String symbolOrCode, int limit) {
-        AssetsEntity asset = assetsRepo.findBySymbol(symbolOrCode)
-                .or(() -> assetsRepo.findByCode(symbolOrCode))
-                .orElseThrow(() -> new IllegalArgumentException("Asset not found: " + symbolOrCode));
-
-        // MySQL: LIMIT 은 setMaxResults 로 건다
-        var query = em.createNativeQuery(
-                "SELECT * FROM daily_summary WHERE asset_id = :assetId ORDER BY date DESC",
-                DailySummaryEntity.class
-        );
-        query.setParameter("assetId", asset.getId());
-        query.setMaxResults(limit);
-
-        @SuppressWarnings("unchecked")
-        List<DailySummaryEntity> rows = query.getResultList();
-
-        return rows.stream()
-                .map(DailySummaryDto::fromEntity)
-                .sorted(Comparator.comparing(DailySummaryDto::getDate)) // DTO에 getDate()가 있어야 함
-                .toList();
+    public List<DailySummaryDto> recentOne(String symbol, int limit) {
+        Long assetId = resolveAssetId(symbol);
+        List<DailySummaryEntity> rows = dailyRepo.findByAssetIdOrderByDateDesc(assetId);
+        if (limit > 0 && rows.size() > limit) rows = rows.subList(0, limit);
+        return rows.stream().map(this::toDto).toList();
     }
 
-    /**
-     * 일간 요약 upsert (INSERT ... ON DUPLICATE KEY UPDATE)
-     * - 엔티티 생성자/세터에 의존하지 않음
-     * - prev_close, change, change_percent 를 SQL에서 계산
-     * - 테이블에 (asset_id, date) UNIQUE 가 있다고 가정
-     */
-    @Transactional
-    public void upsertDaily(long assetId, LocalDate date, BigDecimal close) {
-        // 이전 종가를 여러 번 서브쿼리로 쓰되, JPA에서 파라미터 바인딩만 한다.
-        String sql = """
-            INSERT INTO daily_summary (asset_id, date, price, prev_close, `change`, change_percent)
-            SELECT
-              :assetId AS asset_id,
-              :date     AS date,
-              :price    AS price,
-              (
-                SELECT ds.price
-                FROM daily_summary ds
-                WHERE ds.asset_id = :assetId AND ds.date < :date
-                ORDER BY ds.date DESC
-                LIMIT 1
-              ) AS prev_close,
-              CASE
-                WHEN (
-                  SELECT ds.price FROM daily_summary ds
-                  WHERE ds.asset_id = :assetId AND ds.date < :date
-                  ORDER BY ds.date DESC LIMIT 1
-                ) IS NULL
-                  THEN NULL
-                ELSE :price - (
-                  SELECT ds.price FROM daily_summary ds
-                  WHERE ds.asset_id = :assetId AND ds.date < :date
-                  ORDER BY ds.date DESC LIMIT 1
-                )
-              END AS `change`,
-              CASE
-                WHEN (
-                  SELECT ds.price FROM daily_summary ds
-                  WHERE ds.asset_id = :assetId AND ds.date < :date
-                  ORDER BY ds.date DESC LIMIT 1
-                ) IS NULL
-                 OR (
-                  SELECT ds.price FROM daily_summary ds
-                  WHERE ds.asset_id = :assetId AND ds.date < :date
-                  ORDER BY ds.date DESC LIMIT 1
-                ) = 0
-                  THEN NULL
-                ELSE (
-                  (
-                    :price - (
-                      SELECT ds.price FROM daily_summary ds
-                      WHERE ds.asset_id = :assetId AND ds.date < :date
-                      ORDER BY ds.date DESC LIMIT 1
-                    )
-                  ) / (
-                    SELECT ds.price FROM daily_summary ds
-                    WHERE ds.asset_id = :assetId AND ds.date < :date
-                    ORDER BY ds.date DESC LIMIT 1
-                  ) * 100
-                )
-              END AS change_percent
-            ON DUPLICATE KEY UPDATE
-              price          = VALUES(price),
-              prev_close     = VALUES(prev_close),
-              `change`       = VALUES(`change`),
-              change_percent = VALUES(change_percent)
-            """;
-
-        var q = em.createNativeQuery(sql);
-        q.setParameter("assetId", assetId);
-        q.setParameter("date", date);
-        q.setParameter("price", close);
-        q.executeUpdate();
+    @Transactional(readOnly = true)
+    public Map<String, List<DailySummaryDto>> recentMany(String symbolsCsv, int limit) {
+        Map<String, List<DailySummaryDto>> out = new LinkedHashMap<>();
+        for (String raw : symbolsCsv.split(",")) {
+            String sym = raw.trim();
+            if (sym.isEmpty()) continue;
+            out.put(sym, recentOne(sym, limit));
+        }
+        return out;
     }
 
-    /**
-     * 컨트롤러에서 전체 갱신을 호출할 때 사용할 수 있는 기본 구현.
-     * 실제 외부 API 연동은 여기서 채우면 된다.
-     */
-    @Transactional
-    public void refreshAllFromApi() {
-        // 필요한 경우 외부 API 호출 로직을 여기에 구현.
-        // 컨트롤러가 시그니처만 기대하는 경우 NOP여도 구동/컴파일에는 문제 없음.
+    private DailySummaryDto toDto(DailySummaryEntity e) {
+        DailySummaryDto dto = new DailySummaryDto();
+        dto.setDate(e.getDate());
+        dto.setPrice(e.getPrice());
+        dto.setPriceChange(e.getPriceChange());
+        dto.setChangePercent(e.getChangePercent());
+        return dto;
+    }
+
+    private Long resolveAssetId(String symbol) {
+        if (symbol.equalsIgnoreCase(usdSymbol)) return usdAssetId;
+        if (symbol.equalsIgnoreCase(jpySymbol)) return jpyAssetId;
+        if (symbol.equalsIgnoreCase(cnySymbol)) return cnyAssetId;
+        if (symbol.equalsIgnoreCase(eurSymbol)) return eurAssetId;
+        if (symbol.equalsIgnoreCase(gbpSymbol)) return gbpAssetId;
+
+        String s = symbol.replace(" ", "");
+        if (s.equalsIgnoreCase("USD/KRW")) return usdAssetId;
+        if (s.equalsIgnoreCase("JPY/KRW")) return jpyAssetId;
+        if (s.equalsIgnoreCase("CNY/KRW")) return cnyAssetId;
+        if (s.equalsIgnoreCase("EUR/KRW")) return eurAssetId;
+        if (s.equalsIgnoreCase("GBP/KRW")) return gbpAssetId;
+
+        throw new IllegalArgumentException("Unknown symbol: " + symbol);
     }
 }

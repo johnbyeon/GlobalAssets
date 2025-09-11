@@ -1,9 +1,9 @@
 package com.fourMan.GlobalAssets.repository;
 
 import com.fourMan.GlobalAssets.entity.DailySummaryEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -11,18 +11,16 @@ import java.util.Optional;
 
 public interface RateDailySummaryRepository extends JpaRepository<DailySummaryEntity, Long> {
 
-    @Query(value = """
-            SELECT *
-            FROM daily_summary
-            WHERE asset_id = :assetId
-            ORDER BY ds.summary_date DESC
-            LIMIT :limit
-            """, nativeQuery = true)
-    List<DailySummaryEntity> findRecentByAsset(@Param("assetId") Long assetId,
-                                               @Param("limit") int limit);
+    // 최신 N개 (date desc). limit는 컨트롤러/서비스에서 subList로 잘라써도 됨.
+    List<DailySummaryEntity> findByAssetIdOrderByDateDesc(Long assetId);
 
+    // 페이징 필요할 때
+    Page<DailySummaryEntity> findByAssetIdOrderByDateDesc(Long assetId, Pageable pageable);
+
+    // 업서트용
     Optional<DailySummaryEntity> findByAssetIdAndDate(Long assetId, LocalDate date);
 
-    // 이전(직전) 영업일 데이터 1건
+    Optional<DailySummaryEntity> findTop1ByAssetIdOrderByDateDesc(Long assetId);
+
     Optional<DailySummaryEntity> findTop1ByAssetIdAndDateLessThanOrderByDateDesc(Long assetId, LocalDate date);
 }
