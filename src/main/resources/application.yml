@@ -51,3 +51,4 @@ cloud:
       secret-key: ${SECRET_KEY}
     region:
       static: ${REGION}
+#MySQL \uC14B\uD305
