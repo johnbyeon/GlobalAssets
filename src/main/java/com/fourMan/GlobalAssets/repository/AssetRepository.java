@@ -8,5 +8,5 @@ import java.util.Optional;
 public interface AssetRepository extends JpaRepository<AssetsEntity, Long> {
 
     Optional<AssetsEntity> findBySymbol(String symbol);
-
+    Optional<AssetsEntity> findByCode(String Code);
 }

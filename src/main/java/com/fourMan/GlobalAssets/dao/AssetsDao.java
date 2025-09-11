@@ -17,7 +17,7 @@ public class AssetsDao {
     EntityManager em;
 
     public List<AssetsEntity> findAllAssetsEntity() {
-        String sql = "SELECT a FROM asset a " +
+        String sql = "SELECT a FROM AssetsEntity a " +
                 "ORDER BY a.id DESC";
         List<AssetsEntity> assets = em.createQuery(sql).getResultList();
         return assets;
@@ -34,7 +34,17 @@ public class AssetsDao {
 
         return assets;
     }
+    public List<AssetsEntity> findAllByCode(String code) {
+        String sql = "SELECT a FROM AssetsEntity a " +
+                "WHERE a.code = :code " +
+                "ORDER BY a.id DESC";
 
+        List<AssetsEntity> assets = em.createQuery(sql, AssetsEntity.class)
+                .setParameter("code", code)
+                .getResultList();
+
+        return assets;
+    }
     public AssetsEntity getOneAssetsEntity(Long id) {
         return em.find(AssetsEntity.class,id);
     }

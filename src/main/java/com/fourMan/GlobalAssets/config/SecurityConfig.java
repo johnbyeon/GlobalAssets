@@ -30,6 +30,7 @@ public class SecurityConfig {
                         .requestMatchers("/my/**").hasAnyRole("ADMIN", "USER")
                         .requestMatchers("/chart/**").permitAll()
                         .requestMatchers("/*").permitAll()
+                        .requestMatchers("/start/*").permitAll()
                         .anyRequest().authenticated()
                 );
         // Login 요청 처리

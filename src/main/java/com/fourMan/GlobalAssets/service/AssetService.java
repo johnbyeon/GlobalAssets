@@ -40,6 +40,15 @@ public class AssetService {
         }
         return Collections.emptyList();
     }
+    public List<AssetsDto> findAllByCode(String code){
+        List<AssetsEntity> assetsEntityList  = assetsDao.findAllByCode(code);
+        if (!ObjectUtils.isEmpty(assetsEntityList)) {
+            return assetsEntityList.stream()
+                    .map(x->AssetsDto.fromEntity(x))
+                    .toList();// 안전하게 사용 가능
+        }
+        return Collections.emptyList();
+    }
 
     public void insertAssets(AssetsDto dto){
         assetsDao.insertAssetsEntity(AssetsDto.fromDto(dto));
