@@ -1,6 +1,8 @@
 package com.fourMan.GlobalAssets.controller;
 
 import com.fourMan.GlobalAssets.dto.UserDto;
+import com.fourMan.GlobalAssets.service.ApprovalKeyService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,7 +10,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
+@RequiredArgsConstructor
 public class MainController {
+    private final ApprovalKeyService approvalKeyService;
+
     @GetMapping({"/",""})
     public String GotoMain(){
         return "index";
@@ -37,5 +42,12 @@ public class MainController {
     }
 
 
+    @GetMapping("/get/key")
+    public String Getkey(Model model){
+        String approvalKey = approvalKeyService.getApprovalKey();
+        System.out.println("Approval Key: " + approvalKey);
+        model.addAttribute("key",approvalKey);
+        return  "getkey";
+    }
 
 }
