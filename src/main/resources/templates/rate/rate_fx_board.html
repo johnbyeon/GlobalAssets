@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8"/>
+    <title>일별 환율</title>
+    <style>
+        body { font-family: system-ui, sans-serif; margin: 24px; }
+        h1 { margin-bottom: 8px; }
+        h2 { margin-top: 28px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+        th, td { border: 1px solid #ddd; padding: 8px 10px; text-align: right; }
+        th { background: #f6f6f6; }
+        td:first-child, th:first-child { text-align: center; }
+        .up { color: #d23b3b; }
+        .down { color: #1261c4; }
+        .mute { color: #888; }
+        td.delta::before {
+          content: "—";
+          color: #b3b3b3;
+          display: inline-block;
+          width: 1.1em;
+          margin-right: 6px;
+          text-align: center;
+        }
+        td.delta.up::before   { content: "▲"; color: #d23b3b; }
+        td.delta.down::before { content: "▼"; color: #1261c4; }
+        td.price { font-weight: 700; font-size: 1.05rem; }
+    </style>
+</head>
+<body>
+<h1>일별 환율</h1>
+
+<section>
+    <h2>원/달러</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>날짜</th>
+            <th>현재가</th>
+            <th>전일대비 등락금액</th>
+            <th>전일대비 등락률</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="r : ${usdRows}">
+            <td th:text="${r.date}"></td>
+            <td class="price" th:text="${r.priceText}">-</td>
+            <td class="delta" th:classappend="${r.up} ? ' up' : (${r.down} ? ' down' : ' mute')"
+                th:text="${r.changeText}">-</td>
+            <td class="delta" th:classappend="${r.up} ? ' up' : (${r.down} ? ' down' : ' mute')"
+                th:text="${r.changePercentText}">-</td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+
+<section>
+    <h2>원/엔 (100엔 기준)</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>날짜</th>
+            <th>현재가</th>
+            <th>전일대비 등락금액</th>
+            <th>전일대비 등락률</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="r : ${jpyRows}">
+            <td th:text="${r.date}"></td>
+            <td class="price" th:text="${r.priceText}">-</td>
+            <td class="delta" th:classappend="${r.up} ? ' up' : (${r.down} ? ' down' : ' mute')"
+                th:text="${r.changeText}">-</td>
+            <td class="delta" th:classappend="${r.up} ? ' up' : (${r.down} ? ' down' : ' mute')"
+                th:text="${r.changePercentText}">-</td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+
+<section>
+    <h2>원/위안</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>날짜</th>
+            <th>현재가</th>
+            <th>전일대비 등락금액</th>
+            <th>전일대비 등락률</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="r : ${cnyRows}">
+            <td th:text="${r.date}"></td>
+            <td class="price" th:text="${r.priceText}">-</td>
+            <td class="delta" th:classappend="${r.up} ? ' up' : (${r.down} ? ' down' : ' mute')"
+                th:text="${r.changeText}">-</td>
+            <td class="delta" th:classappend="${r.up} ? ' up' : (${r.down} ? ' down' : ' mute')"
+                th:text="${r.changePercentText}">-</td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+
+<section>
+    <h2>원/유로</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>날짜</th>
+            <th>현재가</th>
+            <th>전일대비 등락금액</th>
+            <th>전일대비 등락률</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="r : ${eurRows}">
+            <td th:text="${r.date}"></td>
+            <td class="price" th:text="${r.priceText}">-</td>
+            <td class="delta" th:classappend="${r.up} ? ' up' : (${r.down} ? ' down' : ' mute')"
+                th:text="${r.changeText}">-</td>
+            <td class="delta" th:classappend="${r.up} ? ' up' : (${r.down} ? ' down' : ' mute')"
+                th:text="${r.changePercentText}">-</td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+
+<section>
+    <h2>원/파운드</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>날짜</th>
+            <th>현재가</th>
+            <th>전일대비 등락금액</th>
+            <th>전일대비 등락률</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="r : ${gbpRows}">
+            <td th:text="${r.date}"></td>
+            <td class="price" th:text="${r.priceText}">-</td>
+            <td class="delta" th:classappend="${r.up} ? ' up' : (${r.down} ? ' down' : ' mute')"
+                th:text="${r.changeText}">-</td>
+            <td class="delta" th:classappend="${r.up} ? ' up' : (${r.down} ? ' down' : ' mute')"
+                th:text="${r.changePercentText}">-</td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+
+</body>
+</html>

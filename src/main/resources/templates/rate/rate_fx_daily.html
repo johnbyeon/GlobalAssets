@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title th:text="'FX Daily - ' + ${symbol}">FX Daily</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 24px; }
+    table { border-collapse: collapse; width: 600px; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: right; }
+    th { background: #f3f4f6; }
+    td:first-child, th:first-child { text-align: left; }
+    .pos { color: #0a7; } .neg { color: #c33; }
+  </style>
+</head>
+<body>
+<h2 th:text="${symbol}">USD/KRW</h2>
+
+<table>
+  <thead>
+  <tr>
+    <th>날짜</th>
+    <th>현재가</th>
+    <th>전일대비</th>
+    <th>등락률</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:if="${rows == null or #lists.isEmpty(rows)}">
+    <td colspan="4" style="text-align:center">데이터 없음</td>
+  </tr>
+  <tr th:each="row : ${rows}">
+    <td th:text="${row.date}">2025-09-11</td>
+    <td th:text="${#numbers.formatDecimal(row.price, 1, 2)}">1,380.50</td>
+    <td th:classappend="${row.priceChange} >= 0 ? 'pos' : 'neg'"
+        th:text="${#numbers.formatDecimal(row.priceChange, 1, 2)}">-1.23</td>
+    <td th:classappend="${row.changePercent} >= 0 ? 'pos' : 'neg'"
+        th:text="${#numbers.formatDecimal(row.changePercent, 1, 2)} + '%'">0.45%</td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>
