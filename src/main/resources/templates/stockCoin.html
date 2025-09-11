@@ -47,7 +47,20 @@
 
         <!-- 우측 컬럼: 광고 -->
         <div class="col-12 col-md-4">
-            <div class="content-box ad" style="width: 250px; height: 750px;">광고</div>
+                <div class="content-box ad"
+                     style="width: 250px; height: 750px;">
+                    <div class="ad-section">
+                        <a th:each="ad, iterStat : ${dtoList}"
+                           th:href="${ad.linkPath}" target="_blank"
+                           class="ad-item"
+                           th:style="${iterStat.index == 0} ? 'display:block;' : 'display:none;'">
+                            <img th:src="@{/image/{filename}(filename=${ad.imagePath})}"
+                                 style="width: 200px; height: auto; margin: 5px;" />
+                        </a>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </main>
@@ -67,5 +80,6 @@
 
 <script th:src="@{/js/main.js}"></script>
 <script th:src="@{/js/stockCoin.js}"></script>
+<script th:src="@{/js/ad-rotation.js}"></script>
 </body>
 </html>

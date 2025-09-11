@@ -10,6 +10,7 @@ import org.hibernate.mapping.Collection;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Slf4j
@@ -36,12 +37,21 @@ public class PricesService {
                 .map(x->PricesDto.fromEntity(x))
                 .toList();
     }
+
     public List<PricesDto> findTop20ByAssetIdOrderByTimestampDesc(Long assetId){
         List<PricesEntity> pricesEntities = pricesRepository.findTop20ByAssetIdOrderByTimestampDesc(assetId);
         if(ObjectUtils.isEmpty(pricesEntities))
         {
             return null;
         }
+        return pricesEntities.stream()
+                .map(x->PricesDto.fromEntity(x))
+                .toList();
+    }
+
+    public List<PricesDto> findAllByAssetIdAndTimeStamp(Long assetId,Timestamp timestamp){
+        List<PricesEntity> pricesEntities = pricesDao.findAllByAssetIdAndTimeStamp(assetId,timestamp);
+        if(ObjectUtils.isEmpty(pricesEntities)){return null;}
         return pricesEntities.stream()
                 .map(x->PricesDto.fromEntity(x))
                 .toList();
