@@ -1,67 +1,49 @@
 package com.fourMan.GlobalAssets.dto;
 
+import com.fourMan.GlobalAssets.entity.AssetsEntity;
 import com.fourMan.GlobalAssets.entity.DailySummaryEntity;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class DailySummaryDto {
 
     private Long id;
-
-    private LocalDate date;
-    //현재가격
+    private Long assetId;
+    private LocalDate date;           // summaryDate와 동의
     private BigDecimal price;
-    //전일가격
-    private BigDecimal prevClose;
-    //전일대비 가격변화
-    private BigDecimal delta;
-    //전일대비 등락률
-    private BigDecimal deltaPercent;
+    private BigDecimal priceChange;
+    private BigDecimal changePercent;
 
-    public static DailySummaryDto fromEntity(DailySummaryEntity entity) {
-        return new DailySummaryDto(
-                entity.getId(),
-                entity.getDate(),
-                entity.getPrice(),
-                entity.getPrevClose(),
-                entity.getDelta(),
-                entity.getDeltaPercent()
-        );
-    }
-
-    public static DailySummaryEntity fromDto(DailySummaryDto dto) {
-        DailySummaryEntity entity = DailySummaryEntity.builder()
-                .id(dto.getId())
-                .date(dto.getDate())
-                .price(dto.getPrice())
-                .prevClose(dto.getPrevClose())
-                .delta(dto.getDelta())
-                .deltaPercent(dto.getDeltaPercent())
+    public static DailySummaryDto fromEntity(DailySummaryEntity e) {
+        return DailySummaryDto.builder()
+                .id(e.getId())
+                .assetId(e.getAssetId())
+                .date(e.getDate())
+                .price(e.getPrice())
+                .priceChange(e.getPriceChange())
+                .changePercent(e.getChangePercent())
                 .build();
-        return entity;
     }
 
-//    /* ===== 화면(Thymeleaf)용 파생 게터 ===== */
-//
-//    /** 템플릿에서 ${r.date} 로 쓰는 값 (LocalDate) */
-//    public LocalDate getDate() {
-//        return timestamp == null ? null : timestamp.toLocalDateTime().toLocalDate();
-//    }
-//
-//    /** 템플릿의 ${r.change} 호환 (priceChange 별칭) */
-//    public Double getChange() {
-//        return priceChange;
-//    }
-//
-//    /** 상승/하락 아이콘용 */
-//    public boolean isUp()   { return priceChange != null && priceChange > 0; }
-//    public boolean isDown() { return priceChange != null && priceChange < 0; }
+    public static DailySummaryEntity toEntity(DailySummaryDto d, AssetsEntity asset) {
+        return DailySummaryEntity.builder()
+                .id(d.getId())
+                .assetId(asset.getId())
+                .date(d.getDate())
+                .price(d.getPrice())
+                .priceChange(d.getPriceChange())
+                .changePercent(d.getChangePercent())
+                .build();
+    }
+
+    /** === 호환용 접근자들 (이전에 사용하던 이름들) === */
+    public LocalDate getSummaryDate() { return date; }
+    public Timestamp getTimestamp() { return (date == null) ? null : Timestamp.valueOf(date.atStartOfDay()); }
+    public Double getPriceAsDouble() { return price == null ? null : price.doubleValue(); }
+    public Double getPriceChangeAsDouble() { return priceChange == null ? null : priceChange.doubleValue(); }
+    public Double getChangePercentAsDouble() { return changePercent == null ? null : changePercent.doubleValue(); }
 }

@@ -1,54 +1,29 @@
 package com.fourMan.GlobalAssets.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 @Entity
-@Getter
-@Setter
-@Builder
-
+@Table(name = "prices")
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class PricesEntity {
-
-    public PricesEntity(){
-
-    }
-
-    public PricesEntity(Long priceId, Long assetId, Timestamp timestamp, BigDecimal open, BigDecimal close, BigDecimal high, BigDecimal low) {
-        this.priceId = priceId;
-        this.assetId = assetId;
-        this.timestamp = timestamp;
-        this.open = open;
-        this.close = close;
-        this.high = high;
-        this.low = low;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "price_id")
     private Long priceId;
-    //종목 번호
-    @Column(nullable = false)
+
+    /** 단순히 asset_id 정수로 보관 (연관관계 안 잡음) */
+    @Column(name = "asset_id", nullable = false)
     private Long assetId;
 
     @Column(nullable = false)
     private Timestamp timestamp;
 
-    @Column(nullable = false)
-    private BigDecimal open;
-
-    @Column(nullable = false)
-    private BigDecimal close;
-
-    @Column(nullable = false)
-    private BigDecimal high;
-
-    @Column(nullable = false)
-    private BigDecimal low;
+    private Double open;
+    private Double close;
+    private Double high;
+    private Double low;
 }
