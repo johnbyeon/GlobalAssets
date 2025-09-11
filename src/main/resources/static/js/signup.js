@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function() {
       if (event.key === 'Enter') {
         console.log('엔터 키 입력 감지');
         if (!window.handleFormSubmit(event)) {
-          event.preventDefault(); // 검증 실패 시만 제출 막기
+          return false // 검증 실패 시만 제출 막기
         }
         // 통과 시 기본 제출 허용
       }
