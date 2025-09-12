@@ -21,10 +21,6 @@ public class MainController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/stockCoin")
-    public String userOnlyStockCoin() {return "stockCoin";}
-
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/admin")
     public String adminOnlyAdminPage() {
         return "admin";
