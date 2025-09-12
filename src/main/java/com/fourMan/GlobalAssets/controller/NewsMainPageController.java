@@ -10,22 +10,26 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.util.List;
 import java.util.Map;
 
+// com.fourMan.GlobalAssets.controller.NewsMainPageController
 @Controller
 @RequiredArgsConstructor
 public class NewsMainPageController {
 
     private final NewsService newsService;
 
-    /** 메인 뉴스 페이지: GET /news */
+    // 메인 페이지
     @GetMapping("/news")
     public String newsMain(Model model) {
-        List<String> keys = newsService.keys();
-        Map<String, String> displayNames = newsService.displayNamesMap();
-        List<NewsItemDto> economyItems = newsService.searchEconomy(15);
-
-        model.addAttribute("keys", keys);
-        model.addAttribute("displayNames", displayNames);
-        model.addAttribute("economyItems", economyItems);
-        return "news/news_main";  // 템플릿: src/main/resources/templates/news/news_main.html
+        model.addAttribute("keys", newsService.keys());
+        model.addAttribute("displayNames", newsService.displayNamesMap());
+        model.addAttribute("economyItems", newsService.searchEconomy(15));
+        return "news/news_main"; // 템플릿 경로
     }
+
+    // ★ 추가: /rate/news로 오면 /news로 보내기
+    @GetMapping("/rate/news")
+    public String redirectNews() {
+        return "redirect:/news";
+    }
+
 }
