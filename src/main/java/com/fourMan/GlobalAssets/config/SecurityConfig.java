@@ -84,7 +84,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/", "/login", "/signup", "/signupProc", "/home",
-                                "/css/**", "/js/**", "/img/**", "/webjars/**",
+                                "/css/**", "/js/**",  "/webjars/**", "/image/**",
                                 "/favicon.ico", "/h2-console/**"
                         ).permitAll()
                         // ★ 여기! 나머지 전부 허용
