@@ -32,7 +32,7 @@
     <div class="row g-4 main-layout d-flex justify-content-center">
         <!-- 좌측 컬럼: 주식/코인 탭 + 뉴스 -->
         <div class="col-12 col-md-4 d-flex flex-column">
-            <div class="content-box chart-box" style="width: 500px; height: 250px;">
+            <div class="content-box chart-box" style="width: 500px; height: 250px; position: relative;">
                 <!-- 탭 버튼 -->
                 <ul class="nav nav-pills mb-2 justify-content-start">
                     <li class="nav-item">
@@ -43,13 +43,22 @@
                     </li>
                 </ul>
 
+                <!-- 자산 선택 드롭다운 (차트 박스 내 상단에 배치) -->
+                <div class="mb-2" style="position: absolute; top: 40px; left: 0; z-index: 1;">
+                    <select id="assetSelector" class="form-select" style="width: 200px;">
+                        <option value="">자산을 선택하세요</option>
+                        <option th:each="asset : ${coinData}" th:value="${asset.symbol}" th:text="${asset.name} + ' (' + ${asset.symbol} + ')'"></option>
+                        <option th:each="asset : ${stockData}" th:value="${asset.symbol}" th:text="${asset.name} + ' (' + ${asset.symbol} + ')'"></option>
+                    </select>
+                </div>
+
                 <!-- 탭 콘텐츠 -->
-                <div class="tab-content">
+                <div class="tab-content" style="margin-top: 60px;">
                     <div class="tab-pane active" id="stock">
-                        <canvas id="stockChart" width="500" height="200"></canvas>
+                        <canvas id="stockChart" width="500" height="200" style="max-width: 100%; max-height: 100%;"></canvas>
                     </div>
                     <div class="tab-pane" id="coin">
-                        <canvas id="coinChart" width="500" height="200"></canvas>
+                        <canvas id="coinChart" width="500" height="200" style="max-width: 100%; max-height: 100%;"></canvas>
                     </div>
                 </div>
             </div>
@@ -65,17 +74,13 @@
 
         <!-- 우측 컬럼: 광고 -->
         <div class="col-12 col-md-4">
-                <div class="content-box ad"
-                     style="width: 250px; height: 750px;">
-                    <div class="ad-section">
-                        <a th:each="ad, iterStat : ${dtoList}"
-                           th:href="${ad.linkPath}" target="_blank"
-                           class="ad-item"
-                           th:style="${iterStat.index == 0} ? 'display:block;' : 'display:none;'">
-                            <img th:src="@{/image/{filename}(filename=${ad.imagePath})}"
-                                 style="width: 200px; height: auto; margin: 5px;" />
-                        </a>
-                    </div>
+            <div class="content-box ad" style="width: 250px; height: 750px;">
+                <div class="ad-section">
+                    <a th:each="ad, iterStat : ${dtoList}" th:href="${ad.linkPath}" target="_blank"
+                       class="ad-item" th:style="${iterStat.index == 0} ? 'display:block;' : 'display:none;'">
+                        <img th:src="@{/image/{filename}(filename=${ad.imagePath})}"
+                             style="width: 200px; height: auto; margin: 5px;" />
+                    </a>
                 </div>
             </div>
         </div>
@@ -96,14 +101,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-financial"></script>
-
-<script th:inline="javascript">
-    /*<![CDATA[*/
-    const stockData = /*[[${stockData}]]*/ [];
-    const coinData = /*[[${coinData}]]*/ [];
-    /*]]>*/
-</script>
-
 <script th:src="@{/js/stockCoin.js}"></script>
 <script th:src="@{/js/ad-rotation.js}"></script>
 </body>

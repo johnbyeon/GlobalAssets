@@ -1,3 +1,4 @@
+/* 기본 스타일 */
 body {
     background-color: #f0f2f5;
     font-family: Arial, sans-serif;
@@ -30,7 +31,8 @@ body {
     flex-direction: column;
     width: 500px;
     height: 250px;
-    align-items: flex-start; /* 차트 박스 내 콘텐츠를 왼쪽 정렬 */
+    align-items: flex-start; /* 콘텐츠를 왼쪽 정렬 */
+    position: relative; /* 드롭다운을 절대 위치로 배치하기 위한 기준 */
 }
 
 /* 탭 버튼 스타일링 */
@@ -38,6 +40,7 @@ body {
     flex-shrink: 0; /* 탭 버튼 영역이 줄어들지 않도록 고정 */
     width: 100%; /* 탭 버튼이 박스 너비를 채우도록 */
     justify-content: flex-start; /* 탭 버튼을 왼쪽에 정렬 */
+    margin-bottom: 0.5rem; /* 드롭다운과 간격 확보 */
 }
 
 .nav-pills .nav-link {
@@ -52,17 +55,29 @@ body {
     color: #fff;
 }
 
+/* 자산 선택 드롭다운 스타일링 */
+#assetSelector {
+    width: 200px; /* 드롭다운 너비 고정 */
+    margin-bottom: 0.5rem; /* 탭 콘텐츠와 간격 */
+    position: absolute; /* 차트 박스 내 절대 위치 */
+    top: 40px; /* 탭 버튼 아래 배치 */
+    left: 0; /* 왼쪽 정렬 */
+    z-index: 10; /* 캔버스 위에 표시 */
+}
+
 /* 탭 콘텐츠 스타일링 */
 .tab-content {
     flex-grow: 1;
     width: 100%;
+    height: 100%; /* 차트 박스 높이를 채우도록 */
     overflow: hidden; /* 콘텐츠가 박스를 벗어나지 않도록 */
+    padding-top: 60px; /* 드롭다운과 겹치지 않도록 상단 여백 */
 }
 
 /* 탭 패널 스타일링 */
 .tab-pane {
     width: 100%;
-    height: 200px; /* 캔버스와 동일한 높이로 고정 */
+    height: 100%; /* 캔버스와 동일한 높이로 조정 */
     display: none; /* 기본적으로 숨김 */
 }
 
@@ -70,10 +85,12 @@ body {
     display: block; /* 활성화된 패널만 표시 */
 }
 
-/* 캔버스 스타일링 */
 canvas {
     width: 100% !important;
     height: 100% !important;
+    object-fit: contain;
+    max-width: 500px;
+    max-height: 200px;
 }
 
 /* 개별 박스 크기 지정 */
@@ -93,7 +110,6 @@ canvas {
     justify-content: flex-start;
 }
 
-
 /* 각 컬럼의 Flex-grow 설정으로 컬럼 너비 조정 */
 .main-layout > .col-md-4 {
     flex-grow: 1;
@@ -109,6 +125,7 @@ canvas {
     width: auto;
 }
 
+/* 로고 이미지 스타일링 */
 img[alt="Logo"] {
     width: 50px;
     height: 50px;
