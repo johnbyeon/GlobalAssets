@@ -16,13 +16,18 @@ public class NewsByKeyController {
 
     private final NewsService newsService;
 
-    /** 종목별 뉴스 페이지: GET /rate/news/{key} */
     @GetMapping("/{key}")
     public String page(@PathVariable String key, Model model) {
+        // key를 displayNameFor에서 한글 종목명으로 변환
         String title = newsService.displayNameFor(key);
+
+        // 해당 key의 관련 뉴스 조회
         List<NewsItemDto> items = newsService.searchByKey(key, 10);
+
         model.addAttribute("title", title);
         model.addAttribute("items", items);
-        return "news/news_by_key"; // 템플릿: news/news_by_key.html
+
+        // 항상 같은 html 호출
+        return "news/news_list";
     }
 }
