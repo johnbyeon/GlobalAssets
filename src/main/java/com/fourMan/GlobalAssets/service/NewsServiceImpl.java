@@ -19,28 +19,32 @@ public class NewsServiceImpl implements NewsService {
     private static final Map<String, String> KEY_TO_QUERY = new HashMap<>();
 
     static {
-        // 요청하신 10종목
-        DISPLAY.put("coin-eth",      "이더리움");
-        DISPLAY.put("coin-doge",     "도지");
-        DISPLAY.put("coin-xrp",      "리플");
-        DISPLAY.put("coin-btc",      "비트코인");
-        DISPLAY.put("coin-sol",      "솔라나");
-        DISPLAY.put("stock-005930",  "삼성전자");
-        DISPLAY.put("stock-000660",  "SK하이닉스");
-        DISPLAY.put("stock-373220",  "LG에너지솔루션");
-        DISPLAY.put("stock-aapl",    "애플");
-        DISPLAY.put("stock-nvda",    "엔비디아");
+        // 주식
+        DISPLAY.put("samsung", "삼성전자");
+        DISPLAY.put("skhynix", "SK하이닉스");
+        DISPLAY.put("lgenergy", "LG에너지솔루션");
+        DISPLAY.put("samsungbio", "삼성바이오로직스");
+        DISPLAY.put("hanwhaaero", "한화에어로스페이스");
 
-        KEY_TO_QUERY.put("coin-eth",     "(이더리움 OR Ethereum OR ETH) (가격 OR 시세 OR 전망 OR 뉴스)");
-        KEY_TO_QUERY.put("coin-doge",    "(도지코인 OR Dogecoin OR DOGE) (가격 OR 시세 OR 뉴스)");
-        KEY_TO_QUERY.put("coin-xrp",     "(리플 OR XRP) (코인 OR 암호화폐 OR 가격 OR 뉴스)");
-        KEY_TO_QUERY.put("coin-btc",     "(비트코인 OR Bitcoin OR BTC) (가격 OR 시세 OR 뉴스)");
-        KEY_TO_QUERY.put("coin-sol",     "(솔라나 OR Solana OR SOL) (가격 OR 시세 OR 뉴스)");
-        KEY_TO_QUERY.put("stock-005930", "(삼성전자 OR 005930) (주가 OR 실적 OR 반도체 OR 뉴스)");
-        KEY_TO_QUERY.put("stock-000660", "(SK하이닉스 OR 하이닉스 OR 000660) (주가 OR 실적 OR 뉴스)");
-        KEY_TO_QUERY.put("stock-373220", "(LG에너지솔루션 OR LG에너지 OR 373220) (주가 OR 실적 OR 배터리 OR 뉴스)");
-        KEY_TO_QUERY.put("stock-aapl",   "(애플 OR Apple OR AAPL) (주가 OR 아이폰 OR 실적 OR 뉴스)");
-        KEY_TO_QUERY.put("stock-nvda",   "(엔비디아 OR Nvidia OR NVDA) (주가 OR AI OR GPU OR 뉴스)");
+        // 코인
+        DISPLAY.put("btc", "비트코인");
+        DISPLAY.put("sol", "솔라나");
+        DISPLAY.put("doge", "도지코인");
+        DISPLAY.put("xrp", "엑스알피(리플)");
+        DISPLAY.put("etc", "이더리움클래식");
+
+        // 검색 쿼리
+        KEY_TO_QUERY.put("samsung", "삼성전자 주가");
+        KEY_TO_QUERY.put("skhynix", "하이닉스 주가");
+        KEY_TO_QUERY.put("lgenergy", "LG에너지솔루션 주가");
+        KEY_TO_QUERY.put("samsungbio", "삼성바이오로직스 주가");
+        KEY_TO_QUERY.put("hanwhaaero", "한화에어로스페이스 방산");
+
+        KEY_TO_QUERY.put("btc", "비트코인 시세");
+        KEY_TO_QUERY.put("sol", "솔라나 코인");
+        KEY_TO_QUERY.put("doge", "도지코인 시세");
+        KEY_TO_QUERY.put("xrp", "리플 코인");
+        KEY_TO_QUERY.put("etc", "이더리움클래식 코인");
     }
 
     @Override
