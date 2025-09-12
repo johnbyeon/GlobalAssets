@@ -1,20 +1,17 @@
-// ad-rotation.js
 document.addEventListener("DOMContentLoaded", function () {
-    const adSections = document.querySelectorAll(".ad-section");
+    const ads = document.querySelectorAll(".ad-item");
+    let current = 0;
 
-    adSections.forEach(section => {
-        const ads = section.querySelectorAll(".ad-item");
-        let currentIndex = 0;
+    if (ads.length > 0) {
+        // 초기화
+        ads.forEach((ad, index) => {
+            ad.style.display = index === 0 ? "block" : "none";
+        });
 
-        if (ads.length > 0) {
-            // 초기 첫 광고 보이기
-            ads.forEach((ad, idx) => ad.style.display = idx === 0 ? "block" : "none");
-
-            setInterval(() => {
-                ads[currentIndex].style.display = "none";
-                currentIndex = (currentIndex + 1) % ads.length;
-                ads[currentIndex].style.display = "block";
-            }, 10000); // 10초마다 전환
-        }
-    });
+        setInterval(() => {
+            ads[current].style.display = "none";
+            current = (current + 1) % ads.length;
+            ads[current].style.display = "block";
+        }, 3000); // 3초마다 교체
+    }
 });
